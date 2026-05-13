@@ -1,0 +1,25 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+exports.id = "vendor-chunks/inversify";
+exports.ids = ["vendor-chunks/inversify"];
+exports.modules = {
+
+/***/ "(ssr)/./node_modules/inversify/lib/esm/index.js":
+/*!*************************************************!*\
+  !*** ./node_modules/inversify/lib/esm/index.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Container: () => (/* reexport safe */ _inversifyjs_container__WEBPACK_IMPORTED_MODULE_2__.Container),\n/* harmony export */   ContainerModule: () => (/* reexport safe */ _inversifyjs_container__WEBPACK_IMPORTED_MODULE_2__.ContainerModule),\n/* harmony export */   LazyServiceIdentifier: () => (/* reexport safe */ _inversifyjs_common__WEBPACK_IMPORTED_MODULE_1__.LazyServiceIdentifier),\n/* harmony export */   bindingScopeValues: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.bindingScopeValues),\n/* harmony export */   bindingTypeValues: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.bindingTypeValues),\n/* harmony export */   decorate: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.decorate),\n/* harmony export */   inject: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.inject),\n/* harmony export */   injectFromBase: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.injectFromBase),\n/* harmony export */   injectable: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.injectable),\n/* harmony export */   multiInject: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.multiInject),\n/* harmony export */   named: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.named),\n/* harmony export */   optional: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.optional),\n/* harmony export */   postConstruct: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.postConstruct),\n/* harmony export */   preDestroy: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.preDestroy),\n/* harmony export */   tagged: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.tagged),\n/* harmony export */   unmanaged: () => (/* reexport safe */ _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__.unmanaged)\n/* harmony export */ });\n/* harmony import */ var reflect_metadata__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! reflect-metadata */ \"(ssr)/./node_modules/reflect-metadata/Reflect.js\");\n/* harmony import */ var _inversifyjs_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inversifyjs/common */ \"(ssr)/./node_modules/@inversifyjs/common/lib/esm/index.js\");\n/* harmony import */ var _inversifyjs_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inversifyjs/container */ \"(ssr)/./node_modules/@inversifyjs/container/lib/esm/index.js\");\n/* harmony import */ var _inversifyjs_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inversifyjs/core */ \"(ssr)/./node_modules/@inversifyjs/core/lib/esm/index.js\");\n\n//# sourceMappingURL=index.js.map\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvaW52ZXJzaWZ5L2xpYi9lc20vaW5kZXguanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBaVU7QUFDalUiLCJzb3VyY2VzIjpbIi9Vc2Vycy9zdGV2ZW4vV29ya3NwYWNlLzQwX0NvZGUvY2xpZW50LXdvcmsvU2lsbHktR29vc2UtRGVtby9zaWxseS1nb29zZS1sZWRnZXItZGVtby9ub2RlX21vZHVsZXMvaW52ZXJzaWZ5L2xpYi9lc20vaW5kZXguanMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0XCJyZWZsZWN0LW1ldGFkYXRhXCI7ZXhwb3J0e0xhenlTZXJ2aWNlSWRlbnRpZmllcn1mcm9tXCJAaW52ZXJzaWZ5anMvY29tbW9uXCI7ZXhwb3J0e0NvbnRhaW5lcixDb250YWluZXJNb2R1bGV9ZnJvbVwiQGludmVyc2lmeWpzL2NvbnRhaW5lclwiO2V4cG9ydHtiaW5kaW5nU2NvcGVWYWx1ZXMsYmluZGluZ1R5cGVWYWx1ZXMsZGVjb3JhdGUsaW5qZWN0LGluamVjdEZyb21CYXNlLGluamVjdGFibGUsbXVsdGlJbmplY3QsbmFtZWQsb3B0aW9uYWwscG9zdENvbnN0cnVjdCxwcmVEZXN0cm95LHRhZ2dlZCx1bm1hbmFnZWR9ZnJvbVwiQGludmVyc2lmeWpzL2NvcmVcIjtcbi8vIyBzb3VyY2VNYXBwaW5nVVJMPWluZGV4LmpzLm1hcFxuIl0sIm5hbWVzIjpbXSwiaWdub3JlTGlzdCI6WzBdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/inversify/lib/esm/index.js\n");
+
+/***/ })
+
+};
+;

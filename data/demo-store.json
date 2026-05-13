@@ -1,0 +1,450 @@
+{
+  "users": [
+    {
+      "id": "user_d00496ebe7d14b",
+      "name": "Captain Goose",
+      "handle": "captain-goose",
+      "createdAt": "2026-05-13T03:20:23.444Z",
+      "credentials": []
+    },
+    {
+      "id": "user_18f9aa44c2ba49",
+      "name": "Api Goose",
+      "handle": "api-goose",
+      "createdAt": "2026-05-13T03:27:56.846Z",
+      "credentials": []
+    },
+    {
+      "id": "user_0036c6ac499845",
+      "name": "Ai Goose",
+      "handle": "ai-goose",
+      "createdAt": "2026-05-13T03:28:14.315Z",
+      "credentials": []
+    },
+    {
+      "id": "user_2cf4039d46ec4d",
+      "name": "Host Goose",
+      "handle": "host-goose",
+      "createdAt": "2026-05-13T03:41:40.983Z",
+      "credentials": []
+    },
+    {
+      "id": "user_7315a5b972304a",
+      "name": "Friend Goose",
+      "handle": "friend-goose",
+      "createdAt": "2026-05-13T03:41:42.621Z",
+      "credentials": []
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess_59aaf4b11a614d",
+      "userId": "user_18f9aa44c2ba49",
+      "createdAt": "2026-05-13T03:27:56.847Z"
+    },
+    {
+      "id": "sess_604ee08d6c9c46",
+      "userId": "user_0036c6ac499845",
+      "createdAt": "2026-05-13T03:28:14.316Z"
+    },
+    {
+      "id": "sess_e0800f2c320c4c",
+      "userId": "user_2cf4039d46ec4d",
+      "createdAt": "2026-05-13T03:41:40.984Z"
+    },
+    {
+      "id": "sess_a17fb5a71d4d4a",
+      "userId": "user_7315a5b972304a",
+      "createdAt": "2026-05-13T03:41:42.622Z"
+    },
+    {
+      "id": "sess_4aa339bbd79445",
+      "userId": "user_d00496ebe7d14b",
+      "createdAt": "2026-05-13T04:42:00.876Z"
+    }
+  ],
+  "challenges": [],
+  "audits": [
+    {
+      "id": "audit_fc66ba8cc6da4a",
+      "type": "game",
+      "message": "Captain Goose opened goose_5b387ff9b8c044.",
+      "createdAt": "2026-05-13T04:42:10.189Z"
+    },
+    {
+      "id": "audit_eca979b0182445",
+      "type": "auth",
+      "message": "Captain Goose entered marked demo fallback mode after WebAuthn was unavailable.",
+      "createdAt": "2026-05-13T04:42:00.880Z"
+    },
+    {
+      "id": "audit_f9331833c2104f",
+      "type": "auth",
+      "message": "Security Key session opened for a verified goose.",
+      "createdAt": "2026-05-13T04:42:00.879Z"
+    },
+    {
+      "id": "audit_05c77063495a42",
+      "type": "game",
+      "message": "Captain Goose opened goose_20b6525a5f3943.",
+      "createdAt": "2026-05-13T04:20:24.214Z"
+    },
+    {
+      "id": "audit_a2ad388e9b7445",
+      "type": "auth",
+      "message": "Captain Goose entered marked demo fallback mode after WebAuthn was unavailable.",
+      "createdAt": "2026-05-13T04:19:54.542Z"
+    },
+    {
+      "id": "audit_354d0830542b41",
+      "type": "auth",
+      "message": "Security Key session opened for a verified goose.",
+      "createdAt": "2026-05-13T04:19:54.541Z"
+    },
+    {
+      "id": "audit_4a3293096f444b",
+      "type": "auth",
+      "message": "Captain Goose entered marked demo fallback mode after WebAuthn was unavailable.",
+      "createdAt": "2026-05-13T04:19:52.905Z"
+    },
+    {
+      "id": "audit_ee748d22db4d43",
+      "type": "auth",
+      "message": "Security Key session opened for a verified goose.",
+      "createdAt": "2026-05-13T04:19:52.903Z"
+    },
+    {
+      "id": "audit_8827ae54d14a40",
+      "type": "game",
+      "message": "Captain Goose opened goose_50ef2bebb3be4b.",
+      "createdAt": "2026-05-13T03:59:43.217Z"
+    },
+    {
+      "id": "audit_b5bbf895477543",
+      "type": "auth",
+      "message": "Captain Goose entered marked demo fallback mode after WebAuthn was unavailable.",
+      "createdAt": "2026-05-13T03:59:08.169Z"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "goose_5b387ff9b8c044",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "X",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "captain",
+          "verifiedAt": "2026-05-13T04:42:10.189Z"
+        }
+      },
+      "moves": [],
+      "aiMode": false
+    },
+    {
+      "id": "goose_20b6525a5f3943",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "X",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "duke",
+          "verifiedAt": "2026-05-13T04:20:24.214Z"
+        }
+      },
+      "moves": [],
+      "aiMode": false
+    },
+    {
+      "id": "goose_50ef2bebb3be4b",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "X",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "jefe",
+          "verifiedAt": "2026-05-13T03:59:43.215Z"
+        }
+      },
+      "moves": [],
+      "aiMode": false
+    },
+    {
+      "id": "goose_ead96df3bb2340",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "X",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_2cf4039d46ec4d",
+          "goose": "captain",
+          "verifiedAt": "2026-05-13T03:41:41.079Z"
+        },
+        "O": {
+          "userId": "user_7315a5b972304a",
+          "goose": "El Jefe Goose",
+          "verifiedAt": "2026-05-13T03:41:42.641Z"
+        }
+      },
+      "moves": [],
+      "aiMode": false
+    },
+    {
+      "id": "goose_bde9038bbc8042",
+      "board": [
+        "X",
+        null,
+        "O",
+        null,
+        "O",
+        "X",
+        "O",
+        "X",
+        null
+      ],
+      "turn": "O",
+      "winner": "O",
+      "players": {
+        "X": {
+          "userId": "user_0036c6ac499845",
+          "goose": "Afro Goose with 3D glasses",
+          "verifiedAt": "2026-05-13T03:28:14.334Z"
+        },
+        "O": {
+          "userId": "offline-minimax-demo",
+          "goose": "Offline MiniMax Demo Goose",
+          "verifiedAt": "2026-05-13T03:28:14.334Z"
+        }
+      },
+      "moves": [
+        {
+          "mark": "X",
+          "index": 0,
+          "at": "2026-05-13T03:28:14.386Z"
+        },
+        {
+          "mark": "O",
+          "index": 4,
+          "at": "2026-05-13T03:28:14.386Z"
+        },
+        {
+          "mark": "X",
+          "index": 5,
+          "at": "2026-05-13T03:36:52.418Z"
+        },
+        {
+          "mark": "O",
+          "index": 2,
+          "at": "2026-05-13T03:36:52.418Z"
+        },
+        {
+          "mark": "X",
+          "index": 7,
+          "at": "2026-05-13T03:36:54.076Z"
+        },
+        {
+          "mark": "O",
+          "index": 6,
+          "at": "2026-05-13T03:36:54.076Z"
+        }
+      ],
+      "aiMode": true
+    },
+    {
+      "id": "goose_6db95747bb914b",
+      "board": [
+        "X",
+        "X",
+        "X",
+        "O",
+        "O",
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "X",
+      "winner": "X",
+      "players": {
+        "X": {
+          "userId": "user_18f9aa44c2ba49",
+          "goose": "Afro Goose with 3D glasses",
+          "verifiedAt": "2026-05-13T03:27:56.953Z"
+        },
+        "O": {
+          "userId": "user_18f9aa44c2ba49",
+          "goose": "El Jefe Goose",
+          "verifiedAt": "2026-05-13T03:27:57.007Z"
+        }
+      },
+      "moves": [
+        {
+          "mark": "X",
+          "index": 0,
+          "at": "2026-05-13T03:27:57.065Z"
+        },
+        {
+          "mark": "O",
+          "index": 3,
+          "at": "2026-05-13T03:27:57.078Z"
+        },
+        {
+          "mark": "X",
+          "index": 1,
+          "at": "2026-05-13T03:27:57.091Z"
+        },
+        {
+          "mark": "O",
+          "index": 4,
+          "at": "2026-05-13T03:27:57.103Z"
+        },
+        {
+          "mark": "X",
+          "index": 2,
+          "at": "2026-05-13T03:27:57.116Z"
+        }
+      ],
+      "aiMode": false
+    },
+    {
+      "id": "goose_a066fa2616f444",
+      "board": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "X",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "Afro Goose with 3D glasses",
+          "verifiedAt": "2026-05-13T03:27:18.709Z"
+        },
+        "O": {
+          "userId": "offline-minimax-demo",
+          "goose": "Offline MiniMax Demo Goose",
+          "verifiedAt": "2026-05-13T03:27:18.709Z"
+        }
+      },
+      "moves": [],
+      "aiMode": true
+    },
+    {
+      "id": "goose_ec6a7e45cbe649",
+      "board": [
+        "X",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "O",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "Afro Goose with 3D glasses",
+          "verifiedAt": "2026-05-13T03:22:42.079Z"
+        },
+        "O": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "El Jefe Goose",
+          "verifiedAt": "2026-05-13T03:24:32.093Z"
+        }
+      },
+      "moves": [
+        {
+          "mark": "X",
+          "index": 0,
+          "at": "2026-05-13T03:26:34.196Z"
+        }
+      ],
+      "aiMode": false
+    },
+    {
+      "id": "goose_b88926c315f04f",
+      "board": [
+        "X",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "turn": "O",
+      "winner": null,
+      "players": {
+        "X": {
+          "userId": "user_d00496ebe7d14b",
+          "goose": "Afro Goose with 3D glasses",
+          "verifiedAt": "2026-05-13T03:21:46.688Z"
+        }
+      },
+      "moves": [
+        {
+          "mark": "X",
+          "index": 0,
+          "at": "2026-05-13T03:22:15.291Z"
+        }
+      ],
+      "aiMode": false
+    }
+  ]
+}
