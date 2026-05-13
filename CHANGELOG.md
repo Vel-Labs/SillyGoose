@@ -2,6 +2,11 @@
 
 All notable repo changes should be logged here.
 
+## 2026-05-13
+
+- Polished the Silly Goose demo shell, goose portraits, Ledger DMK/WebAuthn copy, room flow, Player Two verification states, match winner screen, and visible activity trail.
+- Added split per-goose assets under `public/geese/` and restored `npm run validate:contracts` by adding the missing `ajv` dependency.
+
 ## 2026-05-12
 
 - Added an LLM provider contract/readiness baseline with MiniMax M2.7 example, provider schema, core readiness helper, tests, and integration docs.

@@ -18,13 +18,13 @@ export default async function JoinRoomPage({ params }: { params: Promise<{ roomI
 
   return (
     <PageShell>
-      <section className="mx-auto flex min-h-[70vh] w-full max-w-5xl flex-col items-center justify-center gap-5 px-4 py-10">
+      <section className="mx-auto flex min-h-[calc(100dvh-170px)] w-full max-w-5xl flex-col items-center justify-center gap-5 px-4 py-10">
         {user ? (
           <JoinRoomPanel roomId={roomId} />
         ) : (
           <>
             <div className="rough-panel max-w-lg rounded-sm p-4 text-center text-sm font-black uppercase text-parchment/80">
-              Player Two must sign in or register with their own Ledger Security Key before joining room {roomId}.
+              Player Two must sign in or register with their own Ledger Security Key before joining flock {roomId}.
             </div>
             <GooseLoginPanel redirectTo={next} />
           </>
