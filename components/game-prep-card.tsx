@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Gamepad2, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { findGoose, gooseRoster, type GooseKey } from "@/lib/goose-roster";
+import { GoosePortrait } from "./goose-portrait";
 import { Button } from "./ui/button";
 
 type GamePrepCardProps = {
@@ -50,8 +51,8 @@ export function GamePrepCard({ defaultGoose = "captain" }: GamePrepCardProps) {
         </div>
         <Gamepad2 className="h-8 w-8 text-signal" />
       </div>
-      <div className="grid gap-3 lg:grid-cols-[140px_1fr]">
-        <div className="goose-portrait goose-sprite selected-goose relative min-h-[165px] overflow-hidden" aria-label={activeGoose.name} style={{ backgroundPosition: activeGoose.sprite }} />
+      <div className="grid gap-3 lg:grid-cols-[160px_1fr]">
+        <GoosePortrait goose={activeGoose.key} className="selected-goose min-h-[210px] animate-goose-pop" priority />
         <div>
           <div className="grid grid-cols-4 gap-2">
             {gooseRoster.map((goose) => (
@@ -62,18 +63,19 @@ export function GamePrepCard({ defaultGoose = "captain" }: GamePrepCardProps) {
                 className={`goose-token ${selected === goose.key ? "goose-token-active" : ""}`}
                 aria-label={`Select ${goose.name}`}
               >
-                <span className="goose-sprite absolute inset-0" style={{ backgroundPosition: goose.sprite }} />
+                <GoosePortrait goose={goose.key} className="absolute inset-0 border-0" />
               </button>
             ))}
           </div>
           <div className="mt-2 rounded-sm border-2 border-black bg-parchment p-2 text-ink">
             <div className="text-[11px] font-black uppercase text-ink/60">Selected operator</div>
             <div className="brush-title text-2xl text-ink [text-shadow:2px_2px_0_#f4a51c]">{activeGoose.shortName}</div>
-            <div className="text-xs font-black uppercase text-ember">Honk rating: {activeGoose.rating.toLocaleString()}</div>
+            <div className="text-xs font-black uppercase text-ember">Honk rating: {activeGoose.rating.toLocaleString()} · {activeGoose.role}</div>
+            <div className="mt-1 text-xs font-black uppercase text-ink/70">{activeGoose.catchphrase}</div>
           </div>
           <div className="mt-2 grid gap-3 sm:grid-cols-2">
             <Button onClick={() => openRoom(false)} className="w-full">
-              <Gamepad2 className="h-4 w-4" /> New Game
+              <Gamepad2 className="h-4 w-4" /> Stage Match
             </Button>
             <Button onClick={() => openRoom(true)} variant="secondary" className="w-full">
               <Sparkles className="h-4 w-4" /> Play vs AI

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { CheckCircle2, Coins, Home, LockKeyhole, ShieldCheck, UserRound } from "lucide-react";
+import { CheckCircle2, Coins, LockKeyhole, ShieldCheck } from "lucide-react";
 import { AdminAddUserCard } from "@/components/admin-add-user-card";
 import { PageShell } from "@/components/brand-shell";
 import { GamePrepCard } from "@/components/game-prep-card";
+import { GoosePortrait } from "@/components/goose-portrait";
 import { getCurrentUser } from "@/lib/auth/session";
 import { readStore } from "@/lib/auth/store";
 
@@ -15,33 +16,34 @@ export default async function DashboardPage() {
 
   return (
     <PageShell>
-      <section className="app-width mx-auto h-full w-full px-4 pb-8 sm:px-6">
-        <div className="poster-border dashboard-frame grid h-full min-h-0 gap-4 p-4 lg:grid-cols-[180px_1fr]">
+      <section className="app-width mx-auto w-full px-4 pb-4 sm:px-6">
+        <div className="poster-border dashboard-frame grid min-h-[calc(100dvh-170px)] gap-4 p-4 lg:grid-cols-[180px_1fr]">
           <aside className="dark-card flex flex-col gap-3 p-4">
             <div className="mb-2 flex items-center gap-3">
-              <div className="goose-sprite h-12 w-12 overflow-hidden rounded-sm border-2 border-black bg-parchment" style={{ backgroundPosition: "66.666% 100%" }} />
+              <GoosePortrait goose="captain" className="h-14 w-12 rounded-sm border-2 border-black bg-parchment" />
               <div>
                 <div className="brush-title text-xl leading-none">Silly Goose</div>
                 <div className="text-[10px] font-black uppercase text-signal">Entertainment</div>
               </div>
             </div>
-            {[
-              ["Dashboard", Home],
-              ["My Profile", UserRound],
-              ["My Geese", ShieldCheck],
-              ["Games", LockKeyhole]
-            ].map(([label, Icon], index) => (
-              <div key={String(label)} className={`sidebar-row ${index === 0 ? "sidebar-row-active" : ""}`}>
-                <Icon className="h-4 w-4" />
-                {String(label)}
-              </div>
-            ))}
+            <div className="sidebar-row sidebar-row-active">
+              <ShieldCheck className="h-4 w-4" />
+              Security Key session
+            </div>
+            <div className="sidebar-row">
+              <LockKeyhole className="h-4 w-4" />
+              WebAuthn verified
+            </div>
+            <div className="sidebar-row">
+              <Coins className="h-4 w-4" />
+              1,337 honks
+            </div>
             <div className="mt-auto parchment rotate-[-3deg] p-3 text-center text-ink">
               <div className="brush-title text-2xl text-ink [text-shadow:1px_1px_0_#f4a51c]">Honk</div>
               <div className="text-[10px] font-black uppercase">If you surrender</div>
             </div>
           </aside>
-          <div className="min-h-0 space-y-3 overflow-hidden">
+          <div className="min-h-0 space-y-3">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase text-parchment/65">Welcome back,</p>
@@ -54,10 +56,10 @@ export default async function DashboardPage() {
               </div>
             </div>
             <section className="poster-border parchment relative overflow-hidden p-4">
-              <Image src="/reference-art/game-loading-screen.png" alt="" width={1672} height={941} className="absolute inset-0 h-full w-full object-cover opacity-20" />
+              <Image src="/reference-art/game-loading-screen.png" alt="" width={1672} height={941} priority className="absolute inset-0 h-full w-full object-cover opacity-20" />
               <div className="relative grid items-center gap-4 sm:grid-cols-[150px_1fr_130px]">
                 <div className="rounded-sm border-4 border-signal bg-ink p-3 text-center text-parchment">
-                  <div className="goose-portrait goose-sprite mx-auto h-[96px] w-full" style={{ backgroundPosition: "66.666% 100%" }} />
+                  <GoosePortrait goose="captain" className="mx-auto h-[126px] w-full" priority />
                   <div className="mt-2 text-[10px] font-black uppercase text-signal">Operator profile</div>
                   <div className="brush-title text-xl text-white">{user.name || "Captain Goose"}</div>
                 </div>
@@ -76,7 +78,7 @@ export default async function DashboardPage() {
               <AdminAddUserCard />
               <GamePrepCard defaultGoose="captain" />
             </div>
-            <section className="dark-card hidden p-3 2xl:block">
+            <section className="dark-card p-3">
               <h2 className="brush-title text-2xl text-signal">Recent activity</h2>
               <div className="mt-3 grid gap-3 sm:grid-cols-3">
                 {audits.length ? audits.slice(0, 3).map((audit) => (

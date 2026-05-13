@@ -100,13 +100,15 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
       <div className="grid gap-3 sm:grid-cols-2">
         <Button onClick={() => runAuth("login")} className="w-full">
           <KeyRound className="h-4 w-4" /> Sign in
+          <span className="security-key-pill">Security Key required</span>
         </Button>
         <Button onClick={() => runAuth("register")} variant="danger" className="w-full">
           <ShieldCheck className="h-4 w-4" /> Register
+          <span className="security-key-pill">Security Key required</span>
         </Button>
       </div>
-      <Button onClick={enterDemoMode} variant="ghost" className="w-full border-black bg-black/80 text-parchment">
-        Local fallback
+      <Button onClick={enterDemoMode} variant="ghost" className="w-full border-black bg-black/80 text-parchment/75">
+        Demo-only fallback
       </Button>
       <div className="rounded-sm border-2 border-black bg-black/85 p-2 text-[11px] font-bold leading-tight text-parchment">
         <div className="mb-1 flex items-center gap-2 text-signal">
