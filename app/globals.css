@@ -74,11 +74,25 @@ button, input {
   text-transform: uppercase;
 }
 
+.app-width {
+  max-width: min(94vw, 1880px);
+}
+
 .paper-stage {
   background:
     linear-gradient(90deg, rgba(201, 51, 32, .12), transparent 30%, rgba(18, 101, 183, .12)),
     radial-gradient(circle at 8% 92%, rgba(0, 0, 0, .12), transparent 18rem),
     radial-gradient(circle at 92% 92%, rgba(0, 0, 0, .1), transparent 20rem);
+  color: #fff7df;
+}
+
+.footer-strip {
+  max-width: min(94vw, 1880px);
+  border: 2px solid rgba(7, 7, 7, .85);
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, rgba(7, 7, 7, .92), rgba(31, 24, 18, .86), rgba(7, 7, 7, .92));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
   color: #fff7df;
 }
 
@@ -231,11 +245,11 @@ button, input {
 
 .hero-goose {
   position: absolute;
-  bottom: 29%;
-  left: 2%;
+  bottom: 25%;
+  left: 4%;
   z-index: 1;
-  width: min(20vw, 240px);
-  height: min(30vw, 320px);
+  width: clamp(260px, 22vw, 420px);
+  height: clamp(350px, 34vw, 620px);
   border: 4px solid #070707;
   background-color: #f3dfb4;
   filter: drop-shadow(12px 18px 0 rgba(0, 0, 0, .38));

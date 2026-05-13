@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "functions": {
+    "/api/admin/add-user/challenge": {},
+    "/api/admin/add-user/verify": {},
+    "/api/ai/status": {},
+    "/api/game/move": {},
+    "/api/game/room": {},
+    "/api/webauthn/demo-session": {},
+    "/api/webauthn/login/options": {},
+    "/api/webauthn/register/options": {},
+    "/api/webauthn/register/verify": {},
+    "/api/webauthn/login/verify": {}
+  }
+}

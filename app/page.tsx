@@ -23,7 +23,7 @@ export default function HomePage() {
                 <Link className="nav-chip" href="/game/demo-room">Games</Link>
               </nav>
             </div>
-            <div className="ml-[34%] max-w-[min(44vw,820px)]">
+            <div className="ml-[43%] max-w-[min(38vw,780px)]">
               <h1 className="brush-title text-[clamp(3.5rem,5.25vw,7.4rem)] leading-[.92] text-white">
                 <span className="block">Flock Around</span>
                 <span className="block">And</span>
