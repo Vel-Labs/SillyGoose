@@ -14,8 +14,7 @@
 
 html,
 body {
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
 }
 
 body {
@@ -271,6 +270,18 @@ button, input {
   transition: transform .15s ease, opacity .15s ease, border-color .15s ease;
 }
 
+.security-key-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 247, 223, .45);
+  border-radius: 2px;
+  padding: .15rem .28rem;
+  font-size: .55rem;
+  line-height: 1;
+  white-space: normal;
+}
+
 .goose-token:hover,
 .goose-token-active {
   border-color: #f4a51c;
@@ -278,10 +289,19 @@ button, input {
   transform: translateY(-2px);
 }
 
+.animate-goose-pop {
+  animation: goose-pop .28s ease;
+}
+
 .game-board {
   position: relative;
   overflow: hidden;
   border-color: #070707;
+}
+
+.winner-card {
+  background: #151311;
+  min-height: 116px;
 }
 
 .turn-banner {
@@ -314,6 +334,16 @@ button, input {
   background:
     linear-gradient(180deg, #7c421d, #41200f);
   box-shadow: inset 0 0 0 2px rgba(244, 165, 28, .35), 5px 6px 0 rgba(0, 0, 0, .32);
+}
+
+@keyframes goose-pop {
+  from {
+    transform: translateY(6px) rotate(-1deg);
+  }
+
+  to {
+    transform: translateY(0) rotate(0);
+  }
 }
 
 @media (max-width: 700px) {

@@ -6,7 +6,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const redirectTo = next?.startsWith("/") ? next : "/dashboard";
   return (
     <PageShell>
-      <section className="mx-auto flex h-full w-full max-w-5xl items-center justify-center px-4 pb-16 pt-2">
+      <section className="mx-auto flex min-h-[calc(100dvh-170px)] w-full max-w-5xl items-center justify-center px-4 pb-8 pt-2">
         <GooseLoginPanel redirectTo={redirectTo} />
       </section>
     </PageShell>

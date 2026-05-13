@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Feather, ShieldCheck } from "lucide-react";
 import { Attribution } from "./attribution";
+import { GoosePortrait } from "./goose-portrait";
 
 export function BrandHeader() {
   return (
-    <header className="app-width mx-auto flex h-[92px] w-full shrink-0 flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+    <header className="app-width mx-auto flex w-full shrink-0 flex-wrap items-center justify-between gap-4 px-4 py-3 sm:min-h-[92px] sm:px-6">
       <Link href="/" className="flex items-center gap-3">
-        <div className="goose-sprite h-12 w-12 overflow-hidden rounded-sm border-2 border-black bg-parchment" style={{ backgroundPosition: "66.666% 100%" }} />
+        <GoosePortrait goose="captain" className="h-14 w-12 rounded-sm border-2 border-black bg-parchment" priority />
         <div>
           <div className="brush-title text-3xl leading-none">Silly Goose</div>
           <div className="wood-ribbon mt-1 px-3 py-1 text-xs">Entertainment</div>
@@ -23,21 +24,21 @@ export function BrandHeader() {
 
 export function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="paper-stage relative flex h-dvh overflow-hidden">
+    <main className="paper-stage relative flex min-h-dvh">
       <div className="flex min-h-0 w-full flex-col">
-      <BrandHeader />
-      <div className="min-h-0 flex-1 overflow-hidden">
-        {children}
-      </div>
-      </div>
-      <footer className="footer-strip pointer-events-none absolute bottom-3 left-1/2 z-20 hidden w-full -translate-x-1/2 items-center justify-between gap-4 px-4 text-[11px] sm:flex sm:px-6">
-        <Attribution />
-        <div className="flex items-center gap-2 text-xs font-black uppercase text-parchment/70">
-          <ShieldCheck className="h-4 w-4 text-signal" />
-          Human-verified
-          <Feather className="h-4 w-4" />
+        <BrandHeader />
+        <div className="min-h-0 flex-1">
+          {children}
         </div>
-      </footer>
+        <footer className="footer-strip mx-auto mb-3 mt-3 flex w-full flex-wrap items-center justify-between gap-3 px-4 py-2 text-[11px] sm:px-6">
+          <Attribution />
+          <div className="flex items-center gap-2 text-xs font-black uppercase text-parchment/70">
+            <ShieldCheck className="h-4 w-4 text-signal" />
+            Human-verified
+            <Feather className="h-4 w-4" />
+          </div>
+        </footer>
+      </div>
     </main>
   );
 }
