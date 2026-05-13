@@ -9,6 +9,7 @@ All notable repo changes should be logged here.
 - Added a Supabase integration plan and environment example while keeping the demo local-first and WebAuthn-first by default.
 - Added the explicit Supabase schema contract for WebAuthn-rooted accounts, user profiles, favorite geese, game history, stats, rivals, achievements, future wallet links, and server-owned RLS/grant boundaries.
 - Renamed the Supabase schema namespace to `silly_goose_entertainment` and expanded `.gitignore` for generated Next.js, local runtime data, Supabase CLI, and test/build artifacts.
+- Documented the current Vercel WebAuthn production host values and the required custom-domain swap for future passkey registration.
 - Scoped new tic-tac-toe rooms to compact `tictac_<code>` URLs, split spectator links from Player Two join links, and added append-only game outcome records for future training/evaluation use.
 
 ## 2026-05-12

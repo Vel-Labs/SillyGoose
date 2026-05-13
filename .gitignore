@@ -31,6 +31,7 @@ pnpm-debug.log*
 
 # local tool state
 .supabase/
+supabase/.temp/
 .vercel/
 .turbo/
 playwright-report/

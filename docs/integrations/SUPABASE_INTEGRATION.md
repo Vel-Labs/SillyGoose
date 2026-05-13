@@ -86,6 +86,18 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 NEXT_PUBLIC_SUPABASE_BROWSER_ENABLED=true
 ```
 
+## Vercel WebAuthn Host Values
+
+WebAuthn credentials are scoped to the relying party host. For the current Vercel production domain, set these project environment variables:
+
+```text
+NEXT_PUBLIC_APP_ORIGIN=https://silly-goose-eight.vercel.app
+WEBAUTHN_RP_ID=silly-goose-eight.vercel.app
+WEBAUTHN_ORIGIN=https://silly-goose-eight.vercel.app
+```
+
+If Silly Goose Entertainment gets a custom domain later, replace all three production values with the custom domain before registering credentials on that domain. Existing passkeys registered against the old Vercel host will not automatically become credentials for the new host.
+
 ## Implementation Path
 
 1. Add `@supabase/supabase-js` for a server-side database client. Add `@supabase/ssr` only if Supabase Auth/cookie helpers become part of the app; the current WebAuthn flow does not require Supabase Auth.
