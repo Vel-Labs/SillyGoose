@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { defaultGooseHandle } from "@/lib/auth/goose-handle";
 import { createSession } from "@/lib/auth/session";
 import { addAudit } from "@/lib/auth/store";
 import { verifyAuthentication } from "@/lib/auth/webauthn";
@@ -8,7 +9,7 @@ export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const { handle, response } = await request.json();
-    const user = await verifyAuthentication(request, String(handle || "captain-goose"), response, "login");
+    const user = await verifyAuthentication(request, String(handle || defaultGooseHandle), response, "login");
     await createSession(user.id);
     await addAudit(`${user.name} signed in with a fresh WebAuthn assertion.`, "auth");
     return NextResponse.json({ ok: true, user });

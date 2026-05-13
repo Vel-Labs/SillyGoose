@@ -51,6 +51,8 @@ docs/hackathon/rules.md
 docs/hackathon/submission-checklist.md
 docs/hackathon/vendor-tracks.md
 docs/integrations/LLM_PROVIDER_INTEGRATION.md
+docs/integrations/SUPABASE_INTEGRATION.md
+docs/integrations/SUPABASE_SCHEMA.sql
 docs/project/PROJECT_BRIEF.md
 docs/project/TEMPLATE_USAGE.md
 docs/repo-truth/README.md

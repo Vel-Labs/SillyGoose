@@ -6,6 +6,7 @@
     "keepAtRoot": [
       ".claude/",
       ".github/",
+      ".env.example",
       ".gitignore",
       "AGENTS.md",
       "CHANGELOG.md",

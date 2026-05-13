@@ -6,6 +6,9 @@ All notable repo changes should be logged here.
 
 - Polished the Silly Goose demo shell, goose portraits, Ledger DMK/WebAuthn copy, room flow, Player Two verification states, match winner screen, and visible activity trail.
 - Added split per-goose assets under `public/geese/` and restored `npm run validate:contracts` by adding the missing `ajv` dependency.
+- Added a Supabase integration plan and environment example while keeping the demo local-first and WebAuthn-first by default.
+- Added the explicit Supabase schema contract for WebAuthn-rooted accounts, user profiles, favorite geese, game history, stats, rivals, achievements, future wallet links, and server-owned RLS/grant boundaries.
+- Scoped new tic-tac-toe rooms to compact `tictac_<code>` URLs, split spectator links from Player Two join links, and added append-only game outcome records for future training/evaluation use.
 
 ## 2026-05-12
 

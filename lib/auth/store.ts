@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { formatGooseHandle } from "./goose-handle";
 
 export type PasskeyCredential = {
   id: string;
@@ -41,6 +42,7 @@ export type AuditEntry = {
 
 export type GameRoom = {
   id: string;
+  gameKey: "tictac";
   board: Array<"X" | "O" | null>;
   turn: "X" | "O";
   winner: "X" | "O" | "draw" | null;
@@ -50,6 +52,20 @@ export type GameRoom = {
   };
   moves: { mark: "X" | "O"; index: number; at: string }[];
   aiMode?: boolean;
+  rematchVotes?: string[];
+  completedOutcomeId?: string;
+};
+
+export type GameOutcome = {
+  id: string;
+  roomId: string;
+  gameKey: GameRoom["gameKey"];
+  winner: Exclude<GameRoom["winner"], null>;
+  board: GameRoom["board"];
+  moves: GameRoom["moves"];
+  players: GameRoom["players"];
+  aiMode: boolean;
+  completedAt: string;
 };
 
 type DemoStore = {
@@ -58,6 +74,7 @@ type DemoStore = {
   challenges: Challenge[];
   audits: AuditEntry[];
   rooms: GameRoom[];
+  outcomes: GameOutcome[];
 };
 
 const dataDir = path.join(process.cwd(), "data");
@@ -68,12 +85,18 @@ const emptyStore = (): DemoStore => ({
   sessions: [],
   challenges: [],
   audits: [],
-  rooms: []
+  rooms: [],
+  outcomes: []
 });
 
 async function loadStore(): Promise<DemoStore> {
   try {
-    return JSON.parse(await readFile(storePath, "utf8")) as DemoStore;
+    const store = JSON.parse(await readFile(storePath, "utf8")) as DemoStore;
+    store.outcomes ??= [];
+    for (const room of store.rooms ?? []) {
+      room.gameKey ??= "tictac";
+    }
+    return store;
   } catch {
     return emptyStore();
   }
@@ -101,21 +124,24 @@ export function newId(prefix: string) {
 
 export async function getOrCreateUser(handle: string) {
   return updateStore((store) => {
-    const normalized = handle.trim().toLowerCase() || "captain-goose";
-    let user = store.users.find((candidate) => candidate.handle === normalized);
+    const normalized = formatGooseHandle(handle);
+    const legacy = handle.trim().toLowerCase();
+    let user = store.users.find((candidate) => {
+      const stored = candidate.handle.toLowerCase();
+      return stored === normalized.toLowerCase() || stored === legacy;
+    });
     if (!user) {
       user = {
         id: newId("user"),
-        name: normalized
-          .split(/[-_.\s]+/)
-          .filter(Boolean)
-          .map((part) => part[0]?.toUpperCase() + part.slice(1))
-          .join(" ") || "Captain Goose",
+        name: normalized,
         handle: normalized,
         createdAt: new Date().toISOString(),
         credentials: []
       };
       store.users.push(user);
+    } else if (user.handle !== normalized) {
+      user.handle = normalized;
+      user.name = normalized;
     }
     return user;
   });

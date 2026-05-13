@@ -13,6 +13,7 @@ docs/
   repo-truth/
   governance/
   hackathon/
+  integrations/
   roadmaps/
   templates/
   audits/
@@ -66,3 +67,9 @@ npm run typecheck
 3. `hackathon/rules.md`
 4. `hackathon/vendor-tracks.md`
 5. `hackathon/submission-checklist.md`
+
+### Integrations
+
+1. `integrations/SUPABASE_INTEGRATION.md`
+2. `integrations/SUPABASE_SCHEMA.sql`
+3. `integrations/LLM_PROVIDER_INTEGRATION.md`

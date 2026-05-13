@@ -1,54 +1,41 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PageShell } from "@/components/brand-shell";
-import { CopyInviteButton } from "@/components/copy-invite-button";
+import { GameRoomActions } from "@/components/game-room-actions";
 import { TicTacToeBoard } from "@/components/tic-tac-toe-board";
-import { Button } from "@/components/ui/button";
 import { VerifiedPlayerBadge } from "@/components/verified-player-badge";
 import { getCurrentUser } from "@/lib/auth/session";
 import { readStore } from "@/lib/auth/store";
+import { markForUser } from "@/lib/game/engine";
 import { findGoose } from "@/lib/goose-roster";
 
-export default async function GameRoomPage({ params, searchParams }: { params: Promise<{ roomId: string }>; searchParams: Promise<{ goose?: string }> }) {
+export default async function GameRoomPage({ params }: { params: Promise<{ roomId: string }> }) {
   const { roomId } = await params;
-  const { goose } = await searchParams;
   const user = await getCurrentUser();
-  if (!user) redirect(`/login?next=${encodeURIComponent(`/game/${roomId}`)}`);
   const store = await readStore();
   const room = store.rooms.find((candidate) => candidate.id === roomId);
   if (!room) redirect("/dashboard");
   const joinPath = `/join/${room.id}`;
-  const playerOne = findGoose(goose ?? room.players.X?.goose);
+  const spectatorPath = `/game/${room.id}`;
+  const viewerMark = user ? markForUser(room, user.id) : null;
+  const isSpectator = !viewerMark;
+  const playerOne = findGoose(room.players.X?.goose);
   const playerTwo = room.players.O ? findGoose(room.players.O.goose) : null;
 
   return (
     <PageShell>
       <section className="app-width mx-auto w-full px-4 pb-4 sm:px-6">
-        <div className="poster-border game-frame min-h-[calc(100dvh-170px)] p-4 sm:p-5">
+        <div className="poster-border game-frame game-room-shell min-h-[calc(100dvh-170px)] p-4 sm:p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="brush-title text-4xl text-white xl:text-5xl">Verified Tic-Tac-Toe</h1>
             <p className="room-code mt-1 inline-block px-4 py-2 text-xs">Flock code: {room.id}</p>
+            {isSpectator ? <p className="mt-2 text-xs font-black uppercase text-parchment/70">Spectator view. Verified players own the board.</p> : null}
           </div>
-          <div className="flex gap-3">
-            <Link href="/dashboard"><Button variant="danger">Leave room</Button></Link>
-          </div>
-        </div>
-        <div className="parchment poster-border mb-3 p-3">
-          <p className="text-xs font-black uppercase text-ink/60">Give this flock invite to Player Two</p>
-          <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <code className="break-all rounded-sm border-2 border-black bg-white/70 px-3 py-2 text-sm font-black text-ink">
-              {joinPath}
-            </code>
-            <div className="flex flex-wrap gap-2">
-              <CopyInviteButton invitePath={joinPath} />
-              <Link href={joinPath}><Button variant="secondary">Open Join Page</Button></Link>
-            </div>
-          </div>
+          <GameRoomActions joinPath={joinPath} spectatorPath={spectatorPath} />
         </div>
         <div className="grid items-start gap-5 lg:grid-cols-[240px_1fr_240px]">
           <VerifiedPlayerBadge name={playerOne.shortName} label="Player One" side="red" goose={playerOne.key} featured />
-          <TicTacToeBoard initialRoom={room} />
+          <TicTacToeBoard initialRoom={room} viewerMark={viewerMark} />
           <div>
             <VerifiedPlayerBadge name={playerTwo?.shortName ?? "Player Two Pending"} label="Player Two" side="blue" goose={playerTwo?.key ?? "jefe"} featured verified={Boolean(room.players.O)} />
             {!room.players.O ? (
@@ -57,9 +44,6 @@ export default async function GameRoomPage({ params, searchParams }: { params: P
               </div>
             ) : null}
           </div>
-        </div>
-        <div className="hardware-banner mx-auto mt-3 max-w-3xl p-3 text-center text-sm font-black uppercase text-parchment">
-          {room.players.O ? "Both players verified by Ledger Security Key" : "Player Two verification pending. Security Key required to complete the flock."}
         </div>
         </div>
       </section>

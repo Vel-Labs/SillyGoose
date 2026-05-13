@@ -1,9 +1,10 @@
 "use client";
 
 import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
-import { KeyRound, ShieldAlert, ShieldCheck } from "lucide-react";
+import { KeyRound, Shuffle, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { defaultGooseHandle, formatGooseHandle, randomGooseHandle } from "@/lib/auth/goose-handle";
 import { getLedgerReadiness, prepareLedgerSecurityKeyApp, type LedgerReadiness } from "@/lib/auth/ledger-dmk";
 import { Button } from "./ui/button";
 
@@ -11,6 +12,12 @@ type AuthButtonProps = {
   mode?: "login" | "register";
   redirectTo?: string;
 };
+
+const rememberedHandleKey = "silly-goose:last-claimed-handle";
+
+function normalizeHandle(value: string) {
+  return formatGooseHandle(value);
+}
 
 async function postJson(path: string, body: unknown) {
   const response = await fetch(path, {
@@ -25,7 +32,7 @@ async function postJson(path: string, body: unknown) {
 
 export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthButtonProps) {
   const router = useRouter();
-  const [handle, setHandle] = useState("captain-goose");
+  const [handle, setHandle] = useState(defaultGooseHandle);
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [prepared, setPrepared] = useState(false);
@@ -37,6 +44,8 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
 
   useEffect(() => {
     setReadiness(getLedgerReadiness());
+    const rememberedHandle = window.localStorage.getItem(rememberedHandleKey);
+    if (rememberedHandle) setHandle(rememberedHandle);
   }, []);
 
   async function prepareLedger() {
@@ -56,16 +65,21 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
         await prepareLedger();
       }
       setStatus(nextMode === "register" ? "Preparing registration challenge..." : "Preparing login challenge...");
+      const claimedHandle = normalizeHandle(handle);
       if (nextMode === "register") {
-        const options = await postJson("/api/webauthn/register/options", { handle });
+        const options = await postJson("/api/webauthn/register/options", { handle: claimedHandle });
         setStatus("Insert or unlock your Ledger Security Key, then approve the browser prompt.");
         const response = await startRegistration({ optionsJSON: options });
-        await postJson("/api/webauthn/register/verify", { handle, response });
+        const result = await postJson("/api/webauthn/register/verify", { handle: claimedHandle, response });
+        window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
+        window.alert(`Security Key registered and signed in as @${result.user?.handle ?? claimedHandle}.`);
       } else {
-        const options = await postJson("/api/webauthn/login/options", { handle });
+        const options = await postJson("/api/webauthn/login/options", { handle: claimedHandle });
         setStatus("Approve the browser WebAuthn prompt with your Security Key.");
         const response = await startAuthentication({ optionsJSON: options });
-        await postJson("/api/webauthn/login/verify", { handle, response });
+        const result = await postJson("/api/webauthn/login/verify", { handle: claimedHandle, response });
+        window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
+        window.alert(`Security Key sign-in remembered for @${result.user?.handle ?? claimedHandle}.`);
       }
       setStatus("Verified. Opening the requested goose room...");
       router.push(redirectTo);
@@ -79,25 +93,33 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
   async function enterDemoMode() {
     setError("");
     setStatus("Opening visibly marked demo fallback mode...");
-    await postJson("/api/webauthn/demo-session", { handle });
+    const claimedHandle = normalizeHandle(handle);
+    const result = await postJson("/api/webauthn/demo-session", { handle: claimedHandle });
+    window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
     router.push(redirectTo === "/dashboard" ? "/dashboard?demo=fallback" : redirectTo);
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <label className="block text-xs font-black uppercase text-ink/70" htmlFor="goose-handle">
         Goose handle
       </label>
-      <input
-        id="goose-handle"
-        className="w-full rounded-sm border-2 border-black bg-white/80 px-3 py-2.5 text-base font-black text-ink outline-none focus:ring-4 focus:ring-signal/40"
-        value={handle}
-        onChange={(event) => setHandle(event.target.value)}
-      />
+      <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+        <input
+          id="goose-handle"
+          className="w-full rounded-sm border-2 border-black bg-white/80 px-3 py-2 text-base font-black text-ink outline-none focus:ring-4 focus:ring-signal/40"
+          value={handle}
+          onBlur={() => setHandle(normalizeHandle(handle))}
+          onChange={(event) => setHandle(event.target.value)}
+        />
+        <Button type="button" onClick={() => setHandle(randomGooseHandle())} variant="secondary" className="min-h-11 px-3 text-xs">
+          <Shuffle className="h-4 w-4" /> Random
+        </Button>
+      </div>
       <Button onClick={prepareLedger} variant="secondary" className="w-full">
         <ShieldCheck className="h-4 w-4" /> Prepare Ledger Security Key app
       </Button>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-2 sm:grid-cols-2">
         <Button onClick={() => runAuth("login")} className="w-full">
           <KeyRound className="h-4 w-4" /> Sign in
           <span className="security-key-pill">Security Key required</span>
@@ -110,7 +132,7 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
       <Button onClick={enterDemoMode} variant="ghost" className="w-full border-black bg-black/80 text-parchment/75">
         Demo-only fallback
       </Button>
-      <div className="rounded-sm border-2 border-black bg-black/85 p-2 text-[11px] font-bold leading-tight text-parchment">
+      <div className="min-h-[112px] rounded-sm border-2 border-black bg-black/85 p-3 text-[10px] font-bold leading-tight text-parchment">
         <div className="mb-1 flex items-center gap-2 text-signal">
           <ShieldAlert className="h-4 w-4" /> Ledger DMK readiness
         </div>

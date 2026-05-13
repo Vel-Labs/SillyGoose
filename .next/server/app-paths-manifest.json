@@ -1,18 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/admin/add-user/challenge/route": "app/api/admin/add-user/challenge/route.js",
-  "/api/admin/add-user/verify/route": "app/api/admin/add-user/verify/route.js",
-  "/api/game/move/route": "app/api/game/move/route.js",
-  "/api/game/room/route": "app/api/game/room/route.js",
-  "/api/webauthn/login/options/route": "app/api/webauthn/login/options/route.js",
   "/api/webauthn/demo-session/route": "app/api/webauthn/demo-session/route.js",
-  "/api/webauthn/login/verify/route": "app/api/webauthn/login/verify/route.js",
-  "/api/ai/status/route": "app/api/ai/status/route.js",
-  "/api/webauthn/register/verify/route": "app/api/webauthn/register/verify/route.js",
-  "/api/webauthn/register/options/route": "app/api/webauthn/register/options/route.js",
-  "/dashboard/page": "app/dashboard/page.js",
   "/game/[roomId]/page": "app/game/[roomId]/page.js",
   "/page": "app/page.js",
-  "/login/page": "app/login/page.js",
-  "/join/[roomId]/page": "app/join/[roomId]/page.js"
+  "/dashboard/page": "app/dashboard/page.js"
 }

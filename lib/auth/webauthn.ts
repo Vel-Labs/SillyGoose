@@ -8,6 +8,7 @@ import type {
   AuthenticationResponseJSON,
   RegistrationResponseJSON
 } from "@simplewebauthn/server";
+import { formatGooseHandle } from "./goose-handle";
 import { getOrCreateUser, readStore, updateStore, type DemoUser, type PasskeyCredential } from "./store";
 
 export const rpName = "Silly Goose Entertainment";
@@ -94,7 +95,12 @@ export async function verifyRegistration(request: Request, handle: string, respo
 
 export async function authenticationOptions(request: Request, handle: string, purpose: "login" | "admin" | "player2" = "login") {
   const store = await readStore();
-  const user = store.users.find((candidate) => candidate.handle === handle.trim().toLowerCase());
+  const normalized = formatGooseHandle(handle);
+  const legacy = handle.trim().toLowerCase();
+  const user = store.users.find((candidate) => {
+    const stored = candidate.handle.toLowerCase();
+    return stored === normalized.toLowerCase() || stored === legacy;
+  });
   if (!user || user.credentials.length === 0) {
     throw new Error("No registered Security Key found for that goose handle.");
   }
@@ -123,7 +129,12 @@ export async function verifyAuthentication(
   purpose: "login" | "admin" | "player2" = "login"
 ) {
   const store = await readStore();
-  const user = store.users.find((candidate) => candidate.handle === handle.trim().toLowerCase());
+  const normalized = formatGooseHandle(handle);
+  const legacy = handle.trim().toLowerCase();
+  const user = store.users.find((candidate) => {
+    const stored = candidate.handle.toLowerCase();
+    return stored === normalized.toLowerCase() || stored === legacy;
+  });
   if (!user) throw new Error("No registered goose found for this handle.");
   const credential = user.credentials.find((candidate) => candidate.id === response.id);
   if (!credential) throw new Error("This Security Key is not registered for that goose.");
