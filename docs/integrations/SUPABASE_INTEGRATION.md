@@ -68,7 +68,7 @@ DEMO_SUPABASE_ENABLED=true
 DEMO_STORE_ADAPTER=supabase
 SUPABASE_URL=https://your-project-ref.supabase.co
 SUPABASE_PROJECT_REF=your-project-ref
-SUPABASE_SCHEMA=silly_goose_demo
+SUPABASE_SCHEMA=silly_goose_entertainment
 SUPABASE_SECRET_KEY=sb_secret_...
 ```
 

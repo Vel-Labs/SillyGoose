@@ -1,6 +1,0 @@
-{
-  "/api/webauthn/demo-session/route": "app/api/webauthn/demo-session/route.js",
-  "/game/[roomId]/page": "app/game/[roomId]/page.js",
-  "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
-}
