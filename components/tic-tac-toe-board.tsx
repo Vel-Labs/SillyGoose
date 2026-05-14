@@ -34,10 +34,11 @@ export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playerX = findGoose(room.players.X?.goose);
   const playerO = room.players.O ? findGoose(room.players.O.goose) : null;
+  const mysteryGoose = findGoose("ai");
   const turnGoose = room.turn === "X" ? playerX : playerO;
   const winnerGoose = room.winner === "X" ? playerX : room.winner === "O" ? playerO : null;
   const playerXLoadingImage = `/geese/headshots/${playerX.key}.png`;
-  const playerOLoadingImage = `/geese/headshots/${(playerO ?? playerX).key}.png`;
+  const playerOLoadingImage = `/geese/headshots/${(playerO ?? mysteryGoose).key}.png`;
   const isYourTurn = Boolean(viewerMark && room.turn === viewerMark && !room.winner);
   const canMove = Boolean(isYourTurn && !isMoving);
   const rematchNeeded = room.aiMode || room.players.O ? 2 : 1;
@@ -168,7 +169,7 @@ export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
         </div>
       </div>
       <div key={honkBurst} className="screen-goose-crossing" aria-hidden="true">
-        {[playerX, playerO ?? playerX, turnGoose ?? playerX].map((goose, index) => (
+        {[playerX, playerO ?? mysteryGoose, turnGoose ?? mysteryGoose].map((goose, index) => (
           <span key={`${goose.key}-${index}`} className="screen-goose-crossing-bird" style={{ animationDelay: `${index * 0.28}s` }}>
             <Image src={goose.image} alt="" width={78} height={78} className="h-full w-full object-contain" />
           </span>

@@ -5,6 +5,15 @@
 :root {
   --font-display: "Arial Black";
   --font-sans: Arial;
+  --sg-ink: #100b08;
+  --sg-paper: #f3dfb4;
+  --sg-signal: #f4a51c;
+  --sg-danger: #c93320;
+  --sg-blue: #1265b7;
+  --sg-wood-top: #7c421d;
+  --sg-wood-bottom: #4b2612;
+  --sg-panel-border: #b36a13;
+  --sg-panel-shadow: 0 12px 30px rgba(0, 0, 0, .45);
   color-scheme: dark;
 }
 
@@ -125,14 +134,30 @@ button, input {
   background:
     radial-gradient(circle at 25% 18%, rgba(201, 51, 32, .28), transparent 18rem),
     radial-gradient(circle at 80% 18%, rgba(18, 101, 183, .24), transparent 20rem),
-    linear-gradient(135deg, #151311, #060606 66%, #111);
+    linear-gradient(135deg, #100b08 0%, #05080c 100%);
   border-radius: 8px;
+}
+
+.arcade-panel {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(244, 165, 28, .1), transparent 9rem),
+    linear-gradient(135deg, #100b08 0%, #05080c 100%);
+  border: 2px solid var(--sg-panel-border);
+  border-radius: 6px;
+  box-shadow: var(--sg-panel-shadow), inset 0 0 0 1px rgba(255, 247, 223, .05);
 }
 
 .dashboard-console-frame {
   height: calc(100dvh - 170px);
   min-height: 650px;
   max-height: 920px;
+  overflow: hidden;
+}
+
+.profile-frame,
+.game-room-viewport {
+  height: calc(100dvh - 172px);
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -325,6 +350,15 @@ button, input {
   padding: .55rem;
 }
 
+.game-launch-panel-primary {
+  border-color: var(--sg-signal);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(244, 165, 28, .24), transparent 10rem),
+    linear-gradient(90deg, rgba(122, 37, 25, .28), rgba(5, 25, 41, .22)),
+    rgba(0, 0, 0, .58);
+  padding: .8rem;
+}
+
 .activity-row {
   display: grid;
   min-height: 46px;
@@ -366,6 +400,95 @@ button, input {
   padding: .85rem;
 }
 
+.profile-card-frame {
+  min-height: calc(100dvh - 170px);
+}
+
+.profile-hero-card {
+  display: grid;
+  align-items: stretch;
+  gap: .9rem;
+  grid-template-columns: minmax(190px, 260px) minmax(0, 1fr) minmax(240px, .38fr);
+}
+
+.profile-trading-goose {
+  min-height: 270px;
+}
+
+.profile-hero-record {
+  min-width: 0;
+  border: 3px solid #070707;
+  border-radius: 5px;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(244, 165, 28, .16), transparent 8rem),
+    rgba(0, 0, 0, .42);
+  box-shadow: inset 0 0 0 1px rgba(255, 247, 223, .08), 4px 5px 0 rgba(0, 0, 0, .24);
+  padding: .85rem;
+}
+
+.rating-badge {
+  min-width: 0;
+  border: 2px solid #070707;
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, .18), transparent 22%, rgba(0, 0, 0, .16)),
+    linear-gradient(180deg, var(--sg-wood-top), var(--sg-wood-bottom));
+  box-shadow: inset 0 0 0 1px rgba(244, 165, 28, .26), 3px 4px 0 rgba(0, 0, 0, .26);
+  padding: .55rem .65rem;
+}
+
+.rating-badge span,
+.rating-badge strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-weight: 900;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.rating-badge span {
+  color: rgba(255, 247, 223, .64);
+  font-size: 10px;
+}
+
+.rating-badge strong {
+  margin-top: .18rem;
+  color: var(--sg-signal);
+  font-size: 13px;
+}
+
+.profile-sidebar,
+.profile-main-grid {
+  overflow: hidden;
+}
+
+.profile-goose-display {
+  height: clamp(170px, 21vh, 220px);
+  min-height: 170px;
+}
+
+.profile-sidebar .settings-referral-card {
+  padding: .65rem;
+}
+
+.profile-sidebar .settings-referral-card .goose-sprite {
+  height: 92px;
+  margin-top: .55rem;
+}
+
+.profile-sidebar .settings-referral-card h2 {
+  font-size: .95rem;
+}
+
+.profile-sidebar .settings-referral-card .rounded-sm {
+  margin-top: .55rem;
+  padding: .45rem;
+}
+
+.profile-sidebar .settings-referral-card button {
+  margin-top: .55rem;
+}
+
 .profile-metric-card {
   display: grid;
   min-height: 82px;
@@ -389,6 +512,37 @@ button, input {
   min-height: 0;
   overflow: hidden;
   padding: .85rem;
+}
+
+.profile-activity-panel {
+  border: 3px solid #070707;
+  border-radius: 5px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,0)),
+    rgba(0, 0, 0, .38);
+  box-shadow: inset 0 0 0 2px rgba(255, 247, 223, .05), 3px 4px 0 rgba(0, 0, 0, .22);
+  padding: .75rem;
+}
+
+.profile-activity-panel h3 {
+  color: #f4d491;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.profile-activity-row {
+  min-height: 30px;
+  border: 2px solid rgba(255, 247, 223, .12);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, .34);
+  color: rgba(255, 247, 223, .72);
+  padding: .42rem .5rem;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
 }
 
 .dashboard-tab-button {
@@ -578,6 +732,8 @@ button, input {
 }
 
 .game-library-card-ready {
+  min-height: 260px;
+  grid-column: span 2;
   background:
     radial-gradient(circle at 22% 0%, rgba(244, 165, 28, .26), transparent 8rem),
     linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,0)),
@@ -585,12 +741,13 @@ button, input {
 }
 
 .game-library-card-locked {
-  opacity: .72;
+  opacity: .58;
   filter: saturate(.7);
 }
 
 .game-status-ready,
-.game-status-soon {
+.game-status-soon,
+.status-badge {
   display: inline-flex;
   min-height: 24px;
   align-items: center;
@@ -613,6 +770,26 @@ button, input {
 .game-status-soon {
   background: rgba(255, 247, 223, .12);
   color: rgba(255, 247, 223, .72);
+}
+
+.status-badge-ready {
+  background: #f4a51c;
+  color: #100f0d;
+}
+
+.status-badge-soon {
+  background: rgba(255, 247, 223, .12);
+  color: rgba(255, 247, 223, .72);
+}
+
+.status-badge-danger {
+  background: #c93320;
+  color: white;
+}
+
+.status-badge-verified {
+  background: #14532d;
+  color: #dcfce7;
 }
 
 .coming-soon-button {
@@ -671,6 +848,28 @@ button, input {
   height: 170px;
 }
 
+.mystery-goose-card {
+  color: #1265b7;
+}
+
+.mystery-goose-portrait {
+  position: relative;
+}
+
+.mystery-goose-portrait .goose-portrait {
+  filter: grayscale(1) brightness(.42) contrast(1.2);
+  opacity: .74;
+}
+
+.mystery-goose-lock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #f4a51c;
+  text-shadow: 2px 2px 0 #070707;
+}
+
 .badge-red {
   color: #c93320;
 }
@@ -684,6 +883,8 @@ button, input {
 }
 
 .goose-portrait {
+  position: relative;
+  overflow: hidden;
   border: 3px solid currentColor;
   border-radius: 5px;
   background: #f3dfb4;
@@ -980,6 +1181,42 @@ button.hero-proof-button:hover {
 .game-room-shell {
   position: relative;
   overflow: hidden;
+  padding: .8rem;
+}
+
+.game-room-header {
+  margin-bottom: .65rem;
+}
+
+.game-room-layout {
+  min-height: 0;
+}
+
+.game-room-layout .verified-badge {
+  gap: .6rem;
+  padding: .55rem;
+}
+
+.game-room-layout .verified-badge-featured .goose-portrait {
+  height: clamp(116px, 17vh, 150px);
+}
+
+.game-room-layout .verified-badge .brush-title {
+  font-size: 1.08rem;
+  line-height: 1;
+}
+
+.game-room-layout .game-board-stage {
+  width: min(100%, 430px);
+}
+
+.game-room-layout .game-board {
+  max-width: min(430px, calc(100dvh - 365px));
+}
+
+.game-room-layout .turn-banner {
+  min-height: 36px;
+  padding: .45rem 1.35rem;
 }
 
 @media (max-width: 1023px) {
@@ -1006,6 +1243,18 @@ button.hero-proof-button:hover {
     height: auto;
     grid-template-columns: 1fr;
   }
+
+  .profile-card-frame {
+    min-height: 0;
+  }
+
+  .profile-hero-card {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-trading-goose {
+    min-height: 240px;
+  }
 }
 
 @media (max-width: 639px) {
@@ -1019,6 +1268,10 @@ button.hero-proof-button:hover {
 
   .dashboard-mode-badge {
     justify-self: stretch;
+  }
+
+  .game-library-card-ready {
+    grid-column: span 1;
   }
 }
 
@@ -1055,8 +1308,8 @@ button.hero-proof-button:hover {
   position: absolute;
   top: 36%;
   z-index: 14;
-  width: 204px;
-  min-height: 128px;
+  width: 170px;
+  min-height: 104px;
   border: 3px solid #070707;
   border-radius: 4px;
   background:
@@ -1064,7 +1317,7 @@ button.hero-proof-button:hover {
     linear-gradient(180deg, #7c421d, #4b2612);
   box-shadow: inset 0 0 0 2px rgba(244, 165, 28, .26), 5px 6px 0 rgba(0, 0, 0, .35), 0 14px 28px rgba(0, 0, 0, .38);
   color: #f4d491;
-  padding: .85rem;
+  padding: .65rem;
   text-align: center;
   transform: translateY(-50%);
 }
@@ -1099,20 +1352,20 @@ button.hero-proof-button:hover {
 
 .turn-side-callout p {
   color: #fff7df;
-  font-size: 1.02rem;
+  font-size: .88rem;
 }
 
 .turn-side-callout strong {
-  margin-top: .65rem;
-  font-size: 1.35rem;
+  margin-top: .5rem;
+  font-size: 1.08rem;
 }
 
 .turn-side-callout-left {
-  right: calc(100% + 30px);
+  right: calc(100% + 18px);
 }
 
 .turn-side-callout-right {
-  left: calc(100% + 30px);
+  left: calc(100% + 18px);
 }
 
 .screen-goose-crossing {

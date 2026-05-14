@@ -15,7 +15,7 @@ export function BrandHeader() {
       </Link>
       <nav className="flex flex-wrap items-center gap-2 text-xs font-black uppercase">
         <Link className="wood-sign nav-wood-sign px-3 py-2" href="/dashboard">Dashboard</Link>
-        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/dashboard#games">Games</Link>
+        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/dashboard?tab=games">Games</Link>
         <Link className="wood-sign nav-wood-sign px-3 py-2" href="/profile">Profile</Link>
         <Link className="wood-sign nav-wood-sign px-3 py-2" href="/login">Sign in</Link>
       </nav>

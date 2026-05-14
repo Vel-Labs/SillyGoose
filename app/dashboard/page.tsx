@@ -4,7 +4,8 @@ import { DashboardConsole } from "@/components/dashboard-console";
 import { getCurrentUser } from "@/lib/auth/session";
 import { readStore } from "@/lib/auth/store";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const { tab } = await searchParams;
   const user = await getCurrentUser();
   if (!user) redirect("/login");
   const store = await readStore();
@@ -14,7 +15,7 @@ export default async function DashboardPage() {
 
   return (
     <PageShell>
-      <DashboardConsole user={user} outcomes={outcomes} />
+      <DashboardConsole user={user} outcomes={outcomes} initialTab={tab === "builder" || tab === "games" ? tab : "overview"} />
     </PageShell>
   );
 }

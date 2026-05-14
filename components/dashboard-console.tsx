@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Anchor, Bot, ChevronDown, Coins, Gamepad2, Grid2X2, LockKeyhole, Medal, Radar, ShieldCheck, ShipWheel, Sparkles, Swords, Trophy, Users, type LucideIcon } from "lucide-react";
+import { Anchor, Coins, Gamepad2, Grid2X2, LockKeyhole, Medal, Radar, ShieldCheck, ShipWheel, Sparkles, Swords, Trophy, Users, type LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Panel, SectionHeader } from "@/components/arcade-primitives";
 import { GameLibrary } from "@/components/game-library";
 import { GamePrepCard } from "@/components/game-prep-card";
 import { GoosePortrait } from "@/components/goose-portrait";
@@ -17,6 +18,7 @@ type DashboardTab = "overview" | "builder" | "games";
 type DashboardConsoleProps = {
   user: DemoUser;
   outcomes: GameOutcome[];
+  initialTab?: DashboardTab;
 };
 
 const tabs = [
@@ -45,8 +47,8 @@ const tabs = [
   icon: LucideIcon;
 }>;
 
-export function DashboardConsole({ user, outcomes }: DashboardConsoleProps) {
-  const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
+export function DashboardConsole({ user, outcomes, initialTab = "overview" }: DashboardConsoleProps) {
+  const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
   const activeTabLabel = tabs.find((tab) => tab.key === activeTab)?.label ?? "Overview";
 
   return (
@@ -70,9 +72,7 @@ export function DashboardConsole({ user, outcomes }: DashboardConsoleProps) {
             </div>
           </div>
 
-          <div className="section-divider dashboard-rail-divider">
-            <span>Actions</span>
-          </div>
+          <SectionHeader className="dashboard-rail-divider">Actions</SectionHeader>
 
           <nav className="grid gap-2" aria-label="Dashboard sections">
             {tabs.map((tab) => {
@@ -158,7 +158,6 @@ async function postJson(path: string, body: unknown) {
 
 function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: GameOutcome[]; userId: string; onChangeGoose: () => void }) {
   const [gooseKey, setGooseKey] = useState<GooseKey>("captain");
-  const [expandedGame, setExpandedGame] = useState<string | null>(null);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const goose = findGoose(gooseKey);
@@ -182,11 +181,11 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
     };
   }, []);
 
-  async function openTicTacToe(aiMode: boolean) {
-    setStatus(aiMode ? "Opening Tic-Tac-Toe vs AI Agent..." : "Opening player lobby...");
+  async function openTicTacToe() {
+    setStatus("Opening human-verified Tic-Tac-Toe lobby...");
     setError("");
     try {
-      const data = await postJson("/api/game/room", { aiMode, goose: gooseKey });
+      const data = await postJson("/api/game/room", { aiMode: false, goose: gooseKey });
       window.location.href = `/game/${data.room.id}`;
     } catch (roomError) {
       setStatus("");
@@ -196,13 +195,11 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
 
   return (
     <section className="dashboard-overview-grid">
-      <article className="dashboard-overview-goose dark-card">
-        <div className="section-divider">
-          <span>Locked goose</span>
-        </div>
+      <Panel as="article" className="dashboard-overview-goose">
+        <SectionHeader>Active Goose</SectionHeader>
         <GoosePortrait goose={goose.key} className="selected-goose dashboard-overview-goose-portrait mt-3" priority imageClassName="goose-framed-image" />
         <div className="selected-operator-panel mt-3">
-          <div className="text-[11px] font-black uppercase text-ink/65">Selected operator</div>
+          <div className="text-[11px] font-black uppercase text-ink/65">Human-verified active goose</div>
           <div className="text-xl font-black uppercase leading-none text-ink">{goose.shortName}</div>
           <div className="mt-1 text-[11px] font-black uppercase text-ink/70">Honk rating: {goose.rating.toLocaleString()}</div>
           <div className="mt-1 text-xs font-black uppercase text-ember">{goose.role}</div>
@@ -220,45 +217,25 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
             Change goose
           </Button>
         </div>
-      </article>
+      </Panel>
 
-      <article className="dashboard-overview-games dark-card">
-        <div className="section-divider">
-          <span>Games</span>
-        </div>
-        <div className="mt-3 grid gap-2">
+      <Panel as="article" className="dashboard-overview-games">
+        <SectionHeader>Play Next</SectionHeader>
+        <div className="mt-3 grid gap-3">
+          <div className="game-launch-panel game-launch-panel-primary">
+            <div>
+              <p className="text-[11px] font-black uppercase text-signal">Next Verified Match</p>
+              <h3 className="brush-title mt-1 text-2xl leading-none text-white">Tic-Tac-Toe is ready.</h3>
+              <p className="mt-2 text-xs font-black uppercase leading-snug text-parchment/70">Challenge another human-verified goose with Security Key-backed turns.</p>
+            </div>
+            <Button type="button" onClick={() => openTicTacToe()} className="min-h-11 px-4 py-2 text-xs">
+              <Users className="h-4 w-4" />
+              Play Tic-Tac-Toe
+            </Button>
+          </div>
           {overviewGames.map((game) => {
             const Icon = game.icon;
-            const expanded = expandedGame === game.title;
-            return game.available ? (
-              <div key={game.title} className="grid gap-2">
-                <button
-                  type="button"
-                  onClick={() => setExpandedGame(expanded ? null : game.title)}
-                  className="wood-game-box wood-game-box-live"
-                  aria-expanded={expanded}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{game.title}</span>
-                  <strong>
-                    {game.status}
-                    <ChevronDown className={`h-3.5 w-3.5 transition ${expanded ? "rotate-180" : ""}`} />
-                  </strong>
-                </button>
-                {expanded ? (
-                  <div className="game-launch-panel">
-                    <Button type="button" onClick={() => openTicTacToe(false)} className="min-h-9 px-3 py-1.5 text-[11px]">
-                      <Users className="h-4 w-4" />
-                      Start lobby vs Player
-                    </Button>
-                    <Button type="button" variant="secondary" onClick={() => openTicTacToe(true)} className="min-h-9 px-3 py-1.5 text-[11px]">
-                      <Bot className="h-4 w-4" />
-                      Start vs AI Agent
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
-            ) : (
+            return (
               <div key={game.title} className="wood-game-box wood-game-box-locked" aria-disabled="true">
                 <Icon className="h-5 w-5" />
                 <span>{game.title}</span>
@@ -269,12 +246,10 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
         </div>
         {status ? <p className="mt-3 rounded-sm bg-gooseblue px-3 py-2 text-xs font-black uppercase text-white">{status}</p> : null}
         {error ? <p className="mt-3 rounded-sm bg-ember px-3 py-2 text-xs font-black uppercase text-white">{error}</p> : null}
-      </article>
+      </Panel>
 
-      <article className="dashboard-overview-activity dark-card">
-        <div className="section-divider">
-          <span>Recent activity</span>
-        </div>
+      <Panel as="article" className="dashboard-overview-activity">
+        <SectionHeader>Recent Activity</SectionHeader>
         <div className="mt-3 grid gap-2">
           {outcomes.length ? outcomes.map((outcome) => (
             <OutcomeRow key={outcome.id} outcome={outcome} userId={userId} />
@@ -290,7 +265,7 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
             <strong>Coming soon</strong>
           </div>
         </div>
-      </article>
+      </Panel>
     </section>
   );
 }

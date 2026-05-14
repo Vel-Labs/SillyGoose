@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Anchor, Gamepad2, Grid2X2, LockKeyhole, Radar, ShipWheel, Swords, type LucideIcon } from "lucide-react";
 import { useState } from "react";
+import { Panel, SectionHeader, StatusBadge } from "@/components/arcade-primitives";
 import { Button } from "./ui/button";
 
 type GameCard = {
@@ -24,7 +25,7 @@ const games: GameCard[] = [
   {
     title: "Battleship",
     status: "Coming soon",
-    description: "Fleet placement, verified salvos, and dramatic pond warfare.",
+    description: "Fleet placement pending legal goose review.",
     icon: ShipWheel
   },
   {
@@ -78,27 +79,25 @@ export function GameLibrary() {
   }
 
   return (
-    <section id="games" className="dark-card scroll-mt-6 p-3">
-      <div className="section-divider">
-        <span>Games</span>
-      </div>
+    <Panel id="games" className="scroll-mt-6 p-3">
+      <SectionHeader>Games</SectionHeader>
       <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
         {games.map((game) => {
           const Icon = game.icon;
           return (
             <article key={game.title} className={`game-library-card ${game.available ? "game-library-card-ready" : "game-library-card-locked"}`}>
               <div className="flex items-start justify-between gap-3">
-                <Icon className="h-7 w-7 text-signal" />
-                <span className={game.available ? "game-status-ready" : "game-status-soon"}>
+                <Icon className={game.available ? "h-10 w-10 text-signal" : "h-7 w-7 text-parchment/45"} />
+                <StatusBadge tone={game.available ? "ready" : "soon"}>
                   {game.available ? <Gamepad2 className="h-3.5 w-3.5" /> : <LockKeyhole className="h-3.5 w-3.5" />}
                   {game.status}
-                </span>
+                </StatusBadge>
               </div>
-              <h3 className="mt-3 text-lg font-black uppercase leading-none text-white">{game.title}</h3>
-              <p className="mt-2 min-h-[54px] text-xs font-black uppercase leading-snug text-parchment/70">{game.description}</p>
+              <h3 className={game.available ? "brush-title mt-4 text-3xl leading-none text-white" : "mt-3 text-lg font-black uppercase leading-none text-white"}>{game.title}</h3>
+              <p className={game.available ? "mt-3 min-h-[60px] text-sm font-black uppercase leading-snug text-parchment/82" : "mt-2 min-h-[54px] text-xs font-black uppercase leading-snug text-parchment/55"}>{game.description}</p>
               {game.available ? (
                 <Button onClick={openTicTacToe} className="mt-3 min-h-9 w-full px-2 text-xs">
-                  Play
+                  Play Now
                 </Button>
               ) : (
                 <button type="button" disabled className="coming-soon-button mt-3 w-full">
@@ -111,6 +110,6 @@ export function GameLibrary() {
       </div>
       {status ? <p className="mt-3 rounded-sm bg-gooseblue px-3 py-2 text-xs font-black uppercase text-white">{status}</p> : null}
       {error ? <p className="mt-3 rounded-sm bg-ember px-3 py-2 text-xs font-black uppercase text-white">{error}</p> : null}
-    </section>
+    </Panel>
   );
 }
