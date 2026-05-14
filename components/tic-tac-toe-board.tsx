@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Eye } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { GameRoom } from "@/lib/auth/store";
@@ -192,11 +193,16 @@ export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
               <div className="turn-banner flex w-fit items-center gap-2 px-6 py-2 text-sm">
                 Match Complete
               </div>
-              {viewerMark ? (
-                <button type="button" onClick={playAgain} disabled={viewerHasVoted || isMoving} className="play-again-chip">
-                  Play again? {rematchCount}/{rematchNeeded}
-                </button>
-              ) : null}
+              <div className="winner-modal-actions">
+                {viewerMark ? (
+                  <button type="button" onClick={playAgain} disabled={viewerHasVoted || isMoving} className="winner-action-chip">
+                    Play Again? {rematchCount}/{rematchNeeded}
+                  </button>
+                ) : null}
+                <Link href="/dashboard" className="winner-action-chip winner-action-chip-exit">
+                  Exit Game
+                </Link>
+              </div>
             </div>
             <div className="winner-modal-art">
               <Image src={room.winner === "draw" ? "/reference-art/end-game-screen.png" : "/reference-art/winner-screen.png"} alt="" fill sizes="900px" priority className="winner-modal-image" />

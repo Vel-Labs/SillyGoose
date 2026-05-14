@@ -5,7 +5,11 @@ import { Check, Copy, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 
-export function AdminAddUserCard() {
+type AdminAddUserCardProps = {
+  variant?: "default" | "settings";
+};
+
+export function AdminAddUserCard({ variant = "default" }: AdminAddUserCardProps) {
   const [status, setStatus] = useState("");
 
   async function copyReferralLink() {
@@ -25,6 +29,29 @@ export function AdminAddUserCard() {
     }
     setStatus("Referral link copied.");
     window.setTimeout(() => setStatus(""), 1800);
+  }
+
+  if (variant === "settings") {
+    return (
+      <section className="settings-referral-card">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-black uppercase text-parchment/55">Invite</p>
+            <h2 className="text-lg font-black uppercase leading-none text-white">Refer A Friend</h2>
+          </div>
+          <UserPlus className="h-6 w-6 text-signal" />
+        </div>
+        <div className="goose-portrait goose-sprite relative mt-3 h-[156px] min-h-0 overflow-hidden border-black" style={{ backgroundPosition: "0% 100%" }} />
+        <div className="mt-3 rounded-sm border border-white/15 bg-black/35 p-2 text-[11px] font-black uppercase leading-snug text-parchment/70">
+          Share one link so a friend can claim a goose handle.
+        </div>
+        <Button onClick={copyReferralLink} variant="danger" className="mt-3 min-h-9 w-full px-3 py-1.5 text-xs">
+          {status ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          {status ? "Copied" : "Share link"}
+        </Button>
+        {status ? <p className="mt-2 rounded-sm bg-gooseblue px-3 py-2 text-xs font-black text-white">{status}</p> : null}
+      </section>
+    );
   }
 
   return (
