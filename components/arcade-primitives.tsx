@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { LockKeyhole } from "lucide-react";
+import { Bot, LockKeyhole } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GoosePortrait } from "./goose-portrait";
 
@@ -69,23 +69,24 @@ export function RatingBadge({ label, value }: { label: string; value: string }) 
   );
 }
 
-export function MysteryGooseCard() {
+export function MysteryGooseCard({ mode = "pending" }: { mode?: "pending" | "ai" }) {
+  const aiMode = mode === "ai";
   return (
     <div className="mystery-goose-card verified-badge verified-badge-featured badge-blue">
-      <div className="mystery-goose-portrait">
-        <GoosePortrait goose="ai" alt="Mystery rival goose silhouette" className="min-h-[118px]" />
-        <div className="mystery-goose-lock">
-          <LockKeyhole className="h-8 w-8" />
+      <div className={aiMode ? "mystery-goose-portrait mystery-goose-portrait-online" : "mystery-goose-portrait"}>
+        <GoosePortrait goose="ai" alt={aiMode ? "AI Goose opponent" : "Mystery rival goose silhouette"} className="min-h-[118px]" />
+        <div className={aiMode ? "mystery-goose-lock mystery-goose-lock-online" : "mystery-goose-lock"}>
+          {aiMode ? <Bot className="h-8 w-8" /> : <LockKeyhole className="h-8 w-8" />}
         </div>
       </div>
       <div>
         <div className="text-[11px] font-black uppercase text-parchment/65">Player Two</div>
-        <div className="brush-title text-xl text-white">Mystery Goose Pending</div>
-        <div className="mt-1 text-[11px] font-black uppercase text-parchment/70">Awaiting Rival Goose</div>
-        <div className="mt-2 text-xs font-black uppercase text-signal">Honk rating: locked</div>
+        <div className="brush-title text-xl text-white">{aiMode ? "AI Goose Online" : "Mystery Goose Pending"}</div>
+        <div className="mt-1 text-[11px] font-black uppercase text-parchment/70">{aiMode ? "Suspicious pond algorithm" : "Awaiting Rival Goose"}</div>
+        <div className="mt-2 text-xs font-black uppercase text-signal">{aiMode ? "Honk rating: synthetic" : "Honk rating: locked"}</div>
         <div className="mt-2 flex items-center justify-center gap-2 text-xs font-black uppercase text-parchment">
           <LockKeyhole className="h-4 w-4 text-signal" />
-          Waiting for Security Key
+          {aiMode ? "Offline AI controls O" : "Waiting for Security Key"}
         </div>
       </div>
     </div>

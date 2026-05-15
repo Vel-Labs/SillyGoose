@@ -4,7 +4,7 @@ Supabase should be connected to this demo as a persistence adapter first, not as
 
 The live demo proof is still Ledger Security Key-compatible WebAuthn through SimpleWebAuthn. Supabase can make accounts, profiles, passkey metadata, sessions, challenges, rooms, moves, outcomes, stats, rivals, achievements, and audit entries durable across restarts, but the application should continue to verify game actions through the server routes and the existing WebAuthn session boundary.
 
-The copyable schema contract lives in `SUPABASE_SCHEMA.sql`. Treat it as the database source of truth when wiring Supabase.
+The copyable base schema contract lives in `SUPABASE_SCHEMA.sql`. The staged cosmetic/loadout contract lives in `SUPABASE_FLOCKERROOM_SCHEMA.sql` and should be applied after the base schema when the Flockerroom adapter work begins.
 
 ## Recommended Connection Shape
 
@@ -36,6 +36,18 @@ Start with the current `data/demo-store.json` shape and map it directly:
 - `user_achievements`: `user_id`, `achievement_id`, `unlocked_at`, `unlock_context`
 - `linked_wallets`: `id`, `user_id`, `chain`, `address`, `verified_at`, `last_signature_challenge`, `status`, `created_at`
 - `audit_entries`: `id`, `type`, `message`, `user_id`, `created_at`
+
+Flockerroom adds these tables beside the current goose system:
+
+- `cosmetic_items`: catalog of bases, hats, eyes, bill items, held items, neck/chest items, badges, ribbons, auras, frames, and backgrounds
+- `goose_loadouts`: three Personal Flock slots per demo user, with one active loadout supported by a partial unique index
+- `user_cosmetic_unlocks`: inventory/unlock rows for cosmetics earned through defaults, achievements, streaks, purchases, admin grants, events, or migration
+
+It also adds cosmetic reward fields to `achievements` and progress JSON to `user_achievements`.
+
+The TypeScript persistence boundary is in `lib/flockerroom-repository.ts`. It uses server-side Supabase REST calls when `DEMO_SUPABASE_ENABLED=true` or `DEMO_STORE_ADAPTER=supabase` and the server-only Supabase environment is present. Missing tables, missing env, and failed requests fall back to starter/local preview data instead of crashing `/flockerroom`.
+
+`SUPABASE_FLOCKERROOM_SCHEMA.sql` also defines `silly_goose_entertainment.set_active_goose_loadout(p_user_id text, p_loadout_id uuid)`, an atomic RPC for activating exactly one saved goose loadout after verifying the loadout belongs to the supplied demo user id. The repository calls this RPC first and falls back to a two-update flow only when the RPC is unavailable.
 
 Use normal relational columns for identities and ownership, and JSON only where the game state is naturally compact, such as the nine-cell board snapshot or the append-only outcome payload used for later AI training/evaluation.
 
@@ -107,3 +119,29 @@ If Silly Goose Entertainment gets a custom domain later, replace all three produ
 5. Run the existing room and WebAuthn route checks against both `local` and `supabase` adapter modes before changing the demo default.
 
 Supabase's current Next.js guidance uses `NEXT_PUBLIC_SUPABASE_URL` plus `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for browser-safe clients, and the newer `sb_publishable_*` / `sb_secret_*` key family is preferred over legacy `anon` / `service_role` keys. The secret key is server-only and bypasses RLS, so it must be paired with application-level authorization checks.
+
+## Flockerroom Activation Commands
+
+Do not run these against production unless that target is explicitly approved. This repo can be linked to a hosted project, so verify the target project first:
+
+```bash
+cat supabase/.temp/project-ref
+```
+
+Apply the additive Flockerroom schema:
+
+```bash
+supabase db query --linked --file docs/integrations/SUPABASE_FLOCKERROOM_SCHEMA.sql
+```
+
+Generate and inspect seed SQL:
+
+```bash
+npm run seed:flockerroom:sql > /tmp/flockerroom-seed.sql
+```
+
+Seed the same approved target:
+
+```bash
+supabase db query --linked --file /tmp/flockerroom-seed.sql
+```

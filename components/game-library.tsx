@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
 import { Anchor, Gamepad2, Grid2X2, LockKeyhole, Radar, ShipWheel, Swords, type LucideIcon } from "lucide-react";
 import { useState } from "react";
 import { Panel, SectionHeader, StatusBadge } from "@/components/arcade-primitives";
@@ -63,6 +64,8 @@ export function GameLibrary() {
   const router = useRouter();
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+  const playableGames = games.filter((game) => game.available);
+  const comingSoonGames = games.filter((game) => !game.available);
 
   async function openTicTacToe() {
     setStatus("Opening verified Tic-Tac-Toe...");
@@ -81,35 +84,58 @@ export function GameLibrary() {
   return (
     <Panel id="games" className="scroll-mt-6 p-3">
       <SectionHeader>Games</SectionHeader>
-      <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-        {games.map((game) => {
-          const Icon = game.icon;
-          return (
-            <article key={game.title} className={`game-library-card ${game.available ? "game-library-card-ready" : "game-library-card-locked"}`}>
-              <div className="flex items-start justify-between gap-3">
-                <Icon className={game.available ? "h-10 w-10 text-signal" : "h-7 w-7 text-parchment/45"} />
-                <StatusBadge tone={game.available ? "ready" : "soon"}>
-                  {game.available ? <Gamepad2 className="h-3.5 w-3.5" /> : <LockKeyhole className="h-3.5 w-3.5" />}
-                  {game.status}
-                </StatusBadge>
-              </div>
-              <h3 className={game.available ? "brush-title mt-4 text-3xl leading-none text-white" : "mt-3 text-lg font-black uppercase leading-none text-white"}>{game.title}</h3>
-              <p className={game.available ? "mt-3 min-h-[60px] text-sm font-black uppercase leading-snug text-parchment/82" : "mt-2 min-h-[54px] text-xs font-black uppercase leading-snug text-parchment/55"}>{game.description}</p>
-              {game.available ? (
-                <Button onClick={openTicTacToe} className="mt-3 min-h-9 w-full px-2 text-xs">
-                  Play Now
-                </Button>
-              ) : (
-                <button type="button" disabled className="coming-soon-button mt-3 w-full">
-                  Coming soon
-                </button>
-              )}
-            </article>
-          );
-        })}
+      <div className="game-library-sections mt-3">
+        <GameLibrarySection title="Playable Games">
+          {playableGames.map((game) => (
+            <GameCardView key={game.title} game={game} onPlay={openTicTacToe} />
+          ))}
+        </GameLibrarySection>
+
+        <GameLibrarySection title="Coming Soon Games">
+          <div className="coming-soon-grid">
+            {comingSoonGames.map((game) => (
+              <GameCardView key={game.title} game={game} />
+            ))}
+          </div>
+        </GameLibrarySection>
       </div>
       {status ? <p className="mt-3 rounded-sm bg-gooseblue px-3 py-2 text-xs font-black uppercase text-white">{status}</p> : null}
       {error ? <p className="mt-3 rounded-sm bg-ember px-3 py-2 text-xs font-black uppercase text-white">{error}</p> : null}
     </Panel>
+  );
+}
+
+function GameLibrarySection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="game-library-section">
+      <h3>{title}</h3>
+      <div className="mt-2">{children}</div>
+    </section>
+  );
+}
+
+function GameCardView({ game, onPlay }: { game: GameCard; onPlay?: () => void }) {
+  const Icon = game.icon;
+  return (
+    <article className={`game-library-card ${game.available ? "game-library-card-ready" : "game-library-card-locked"}`}>
+      <div className="flex items-start justify-between gap-3">
+        <Icon className={game.available ? "h-10 w-10 text-signal" : "h-7 w-7 text-parchment/45"} />
+        <StatusBadge tone={game.available ? "ready" : "soon"}>
+          {game.available ? <Gamepad2 className="h-3.5 w-3.5" /> : <LockKeyhole className="h-3.5 w-3.5" />}
+          {game.status}
+        </StatusBadge>
+      </div>
+      <h3 className={game.available ? "brush-title mt-4 text-3xl leading-none text-white" : "mt-3 text-lg font-black uppercase leading-none text-white"}>{game.title}</h3>
+      <p className={game.available ? "mt-3 min-h-[60px] text-sm font-black uppercase leading-snug text-parchment/82" : "mt-2 min-h-[54px] text-xs font-black uppercase leading-snug text-parchment/55"}>{game.description}</p>
+      {game.available ? (
+        <Button onClick={onPlay} className="mt-3 min-h-9 w-full px-2 text-xs">
+          Play Now
+        </Button>
+      ) : (
+        <button type="button" disabled className="coming-soon-button mt-3 w-full">
+          Coming soon
+        </button>
+      )}
+    </article>
   );
 }

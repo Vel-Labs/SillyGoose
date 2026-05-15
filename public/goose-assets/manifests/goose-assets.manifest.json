@@ -1,0 +1,1428 @@
+{
+  "generatedAt": "2026-05-14T23:08:29.494Z",
+  "sourceDir": "/Users/steven/Workspace/40_Code/client-work/Silly-Goose-Demo/reference-art/goose_sprites",
+  "assets": [
+    {
+      "slug": "classic",
+      "category": "base",
+      "variant": "full",
+      "path": "/goose-assets/bases/classic/full.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 211,
+      "height": 307
+    },
+    {
+      "slug": "classic",
+      "category": "base",
+      "variant": "bust",
+      "path": "/goose-assets/bases/classic/bust.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 229,
+      "height": 264
+    },
+    {
+      "slug": "classic",
+      "category": "base",
+      "variant": "wing-hold",
+      "path": "/goose-assets/bases/classic/wing-hold.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 228,
+      "height": 172
+    },
+    {
+      "slug": "classic",
+      "category": "base",
+      "variant": "bill",
+      "path": "/goose-assets/bases/classic/bill.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 160,
+      "height": 143
+    },
+    {
+      "slug": "golden",
+      "category": "base",
+      "variant": "full",
+      "path": "/goose-assets/bases/golden/full.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 207,
+      "height": 292
+    },
+    {
+      "slug": "golden",
+      "category": "base",
+      "variant": "bust",
+      "path": "/goose-assets/bases/golden/bust.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 228,
+      "height": 273
+    },
+    {
+      "slug": "golden",
+      "category": "base",
+      "variant": "wing-hold",
+      "path": "/goose-assets/bases/golden/wing-hold.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 228,
+      "height": 176
+    },
+    {
+      "slug": "golden",
+      "category": "base",
+      "variant": "bill",
+      "path": "/goose-assets/bases/golden/bill.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 160,
+      "height": 144
+    },
+    {
+      "slug": "zombie",
+      "category": "base",
+      "variant": "full",
+      "path": "/goose-assets/bases/zombie/full.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 205,
+      "height": 273
+    },
+    {
+      "slug": "zombie",
+      "category": "base",
+      "variant": "bust",
+      "path": "/goose-assets/bases/zombie/bust.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 234,
+      "height": 273
+    },
+    {
+      "slug": "zombie",
+      "category": "base",
+      "variant": "wing-hold",
+      "path": "/goose-assets/bases/zombie/wing-hold.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 222,
+      "height": 171
+    },
+    {
+      "slug": "zombie",
+      "category": "base",
+      "variant": "bill",
+      "path": "/goose-assets/bases/zombie/bill.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 150,
+      "height": 135
+    },
+    {
+      "slug": "holographic",
+      "category": "base",
+      "variant": "full",
+      "path": "/goose-assets/bases/holographic/full.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 213,
+      "height": 264
+    },
+    {
+      "slug": "holographic",
+      "category": "base",
+      "variant": "bust",
+      "path": "/goose-assets/bases/holographic/bust.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 242,
+      "height": 263
+    },
+    {
+      "slug": "holographic",
+      "category": "base",
+      "variant": "wing-hold",
+      "path": "/goose-assets/bases/holographic/wing-hold.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 236,
+      "height": 195
+    },
+    {
+      "slug": "holographic",
+      "category": "base",
+      "variant": "bill",
+      "path": "/goose-assets/bases/holographic/bill.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 151,
+      "height": 145
+    },
+    {
+      "slug": "robotic",
+      "category": "base",
+      "variant": "full",
+      "path": "/goose-assets/bases/robotic/full.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 202,
+      "height": 260
+    },
+    {
+      "slug": "robotic",
+      "category": "base",
+      "variant": "bust",
+      "path": "/goose-assets/bases/robotic/bust.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 231,
+      "height": 259
+    },
+    {
+      "slug": "robotic",
+      "category": "base",
+      "variant": "wing-hold",
+      "path": "/goose-assets/bases/robotic/wing-hold.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 221,
+      "height": 180
+    },
+    {
+      "slug": "robotic",
+      "category": "base",
+      "variant": "bill",
+      "path": "/goose-assets/bases/robotic/bill.png",
+      "sourceFile": "base+pfp+weapon-arm+bill.png",
+      "width": 152,
+      "height": 134
+    },
+    {
+      "slug": "crown",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/crown.png",
+      "sourceFile": "hats+examples.png",
+      "width": 304,
+      "height": 167
+    },
+    {
+      "slug": "crown",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/crown-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 299,
+      "height": 230
+    },
+    {
+      "slug": "fireman-helmet",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/fireman-helmet.png",
+      "sourceFile": "hats+examples.png",
+      "width": 343,
+      "height": 165
+    },
+    {
+      "slug": "fireman-helmet",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/fireman-helmet-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 343,
+      "height": 233
+    },
+    {
+      "slug": "sombrero",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/sombrero.png",
+      "sourceFile": "hats+examples.png",
+      "width": 295,
+      "height": 172
+    },
+    {
+      "slug": "sombrero",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/sombrero-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 253,
+      "height": 233
+    },
+    {
+      "slug": "top-hat",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/top-hat.png",
+      "sourceFile": "hats+examples.png",
+      "width": 195,
+      "height": 172
+    },
+    {
+      "slug": "top-hat",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/top-hat-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 178,
+      "height": 233
+    },
+    {
+      "slug": "beanie",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/beanie.png",
+      "sourceFile": "hats+examples.png",
+      "width": 292,
+      "height": 174
+    },
+    {
+      "slug": "beanie",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/beanie-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 304,
+      "height": 215
+    },
+    {
+      "slug": "bandana",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/bandana.png",
+      "sourceFile": "hats+examples.png",
+      "width": 343,
+      "height": 197
+    },
+    {
+      "slug": "bandana",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/bandana-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 336,
+      "height": 217
+    },
+    {
+      "slug": "punk-mohawk",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/punk-mohawk.png",
+      "sourceFile": "hats+examples.png",
+      "width": 264,
+      "height": 175
+    },
+    {
+      "slug": "punk-mohawk",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/punk-mohawk-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 171,
+      "height": 223
+    },
+    {
+      "slug": "sticky-duck",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/sticky-duck.png",
+      "sourceFile": "hats+examples.png",
+      "width": 139,
+      "height": 175
+    },
+    {
+      "slug": "sticky-duck",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/sticky-duck-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 171,
+      "height": 223
+    },
+    {
+      "slug": "traffic-cone",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/traffic-cone.png",
+      "sourceFile": "hats+examples.png",
+      "width": 288,
+      "height": 194
+    },
+    {
+      "slug": "traffic-cone",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/traffic-cone-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 306,
+      "height": 238
+    },
+    {
+      "slug": "chef-hat",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/chef-hat.png",
+      "sourceFile": "hats+examples.png",
+      "width": 343,
+      "height": 176
+    },
+    {
+      "slug": "chef-hat",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/chef-hat-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 323,
+      "height": 243
+    },
+    {
+      "slug": "pirate-hat",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/pirate-hat.png",
+      "sourceFile": "hats+examples.png",
+      "width": 278,
+      "height": 110
+    },
+    {
+      "slug": "pirate-hat",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/pirate-hat-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 174,
+      "height": 207
+    },
+    {
+      "slug": "halo",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/halo.png",
+      "sourceFile": "hats+examples.png",
+      "width": 182,
+      "height": 110
+    },
+    {
+      "slug": "halo",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/halo-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 168,
+      "height": 207
+    },
+    {
+      "slug": "devil-horns",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/devil-horns.png",
+      "sourceFile": "hats+examples.png",
+      "width": 300,
+      "height": 149
+    },
+    {
+      "slug": "devil-horns",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/devil-horns-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 310,
+      "height": 214
+    },
+    {
+      "slug": "visor",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/visor.png",
+      "sourceFile": "hats+examples.png",
+      "width": 343,
+      "height": 172
+    },
+    {
+      "slug": "visor",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/visor-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 332,
+      "height": 221
+    },
+    {
+      "slug": "tin-foil-hat",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/tin-foil-hat.png",
+      "sourceFile": "hats+examples.png",
+      "width": 293,
+      "height": 161
+    },
+    {
+      "slug": "tin-foil-hat",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/tin-foil-hat-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 178,
+      "height": 212
+    },
+    {
+      "slug": "graduation-cap",
+      "category": "hat",
+      "variant": "standalone",
+      "path": "/goose-assets/hats/graduation-cap.png",
+      "sourceFile": "hats+examples.png",
+      "width": 216,
+      "height": 161
+    },
+    {
+      "slug": "graduation-cap",
+      "category": "hat",
+      "variant": "bust-preview",
+      "path": "/goose-assets/hats/graduation-cap-bust-preview.png",
+      "sourceFile": "hats+examples.png",
+      "width": 173,
+      "height": 212
+    },
+    {
+      "slug": "sunglasses",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/sunglasses.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 252,
+      "height": 123
+    },
+    {
+      "slug": "sunglasses",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/sunglasses-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 220,
+      "height": 290
+    },
+    {
+      "slug": "monocle",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/monocle.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 184,
+      "height": 204
+    },
+    {
+      "slug": "monocle",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/monocle-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 154,
+      "height": 290
+    },
+    {
+      "slug": "three-d-glasses",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/three-d-glasses.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 251,
+      "height": 116
+    },
+    {
+      "slug": "three-d-glasses",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/three-d-glasses-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 260,
+      "height": 289
+    },
+    {
+      "slug": "eyepatch",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/eyepatch.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 224,
+      "height": 137
+    },
+    {
+      "slug": "eyepatch",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/eyepatch-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 220,
+      "height": 291
+    },
+    {
+      "slug": "laser-visor",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/laser-visor.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 229,
+      "height": 125
+    },
+    {
+      "slug": "laser-visor",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/laser-visor-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 154,
+      "height": 291
+    },
+    {
+      "slug": "reading-glasses",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/reading-glasses.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 261,
+      "height": 131
+    },
+    {
+      "slug": "reading-glasses",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/reading-glasses-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 260,
+      "height": 290
+    },
+    {
+      "slug": "sleep-mask",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/sleep-mask.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 231,
+      "height": 143
+    },
+    {
+      "slug": "sleep-mask",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/sleep-mask-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 220,
+      "height": 291
+    },
+    {
+      "slug": "heart-glasses",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/heart-glasses.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 247,
+      "height": 133
+    },
+    {
+      "slug": "heart-glasses",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/heart-glasses-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 154,
+      "height": 291
+    },
+    {
+      "slug": "cyber-visor",
+      "category": "eyes",
+      "variant": "standalone",
+      "path": "/goose-assets/eyes/cyber-visor.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 231,
+      "height": 122
+    },
+    {
+      "slug": "cyber-visor",
+      "category": "eyes",
+      "variant": "bust-preview",
+      "path": "/goose-assets/eyes/cyber-visor-bust-preview.png",
+      "sourceFile": "eyes+examples.png",
+      "width": 260,
+      "height": 290
+    },
+    {
+      "slug": "knife",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/knife.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 207,
+      "height": 208
+    },
+    {
+      "slug": "knife",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/knife-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 242,
+      "height": 245
+    },
+    {
+      "slug": "katana",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/katana.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 194,
+      "height": 241
+    },
+    {
+      "slug": "katana",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/katana-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 246,
+      "height": 246
+    },
+    {
+      "slug": "cigar",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/cigar.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 195,
+      "height": 190
+    },
+    {
+      "slug": "cigar",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/cigar-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 230,
+      "height": 245
+    },
+    {
+      "slug": "spoon",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/spoon.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 192,
+      "height": 216
+    },
+    {
+      "slug": "spoon",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/spoon-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 237,
+      "height": 245
+    },
+    {
+      "slug": "fork",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/fork.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 183,
+      "height": 227
+    },
+    {
+      "slug": "fork",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/fork-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 246,
+      "height": 246
+    },
+    {
+      "slug": "rose",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/rose.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 192,
+      "height": 221
+    },
+    {
+      "slug": "rose",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/rose-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 246,
+      "height": 247
+    },
+    {
+      "slug": "fish",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/fish.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 221,
+      "height": 210
+    },
+    {
+      "slug": "fish",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/fish-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 245,
+      "height": 242
+    },
+    {
+      "slug": "whistle",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/whistle.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 177,
+      "height": 171
+    },
+    {
+      "slug": "whistle",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/whistle-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 221,
+      "height": 244
+    },
+    {
+      "slug": "paintbrush",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/paintbrush.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 197,
+      "height": 212
+    },
+    {
+      "slug": "paintbrush",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/paintbrush-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 245,
+      "height": 247
+    },
+    {
+      "slug": "scroll",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/scroll.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 207,
+      "height": 208
+    },
+    {
+      "slug": "scroll",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/scroll-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 227,
+      "height": 247
+    },
+    {
+      "slug": "key",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/key.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 176,
+      "height": 202
+    },
+    {
+      "slug": "key",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/key-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 235,
+      "height": 247
+    },
+    {
+      "slug": "glow-stick",
+      "category": "bill_item",
+      "variant": "standalone",
+      "path": "/goose-assets/bill-items/glow-stick.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 200,
+      "height": 206
+    },
+    {
+      "slug": "glow-stick",
+      "category": "bill_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/bill-items/glow-stick-bust-preview.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "width": 243,
+      "height": 247
+    },
+    {
+      "slug": "baseball-bat",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/baseball-bat.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 173,
+      "height": 225
+    },
+    {
+      "slug": "baseball-bat",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/baseball-bat-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 206,
+      "height": 231
+    },
+    {
+      "slug": "wooden-spoon",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/wooden-spoon.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 154,
+      "height": 212
+    },
+    {
+      "slug": "wooden-spoon",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/wooden-spoon-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 192,
+      "height": 231
+    },
+    {
+      "slug": "mace",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/mace.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 177,
+      "height": 222
+    },
+    {
+      "slug": "mace",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/mace-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 210,
+      "height": 230
+    },
+    {
+      "slug": "bottle",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/bottle.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 153,
+      "height": 220
+    },
+    {
+      "slug": "bottle",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/bottle-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 185,
+      "height": 231
+    },
+    {
+      "slug": "trophy",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/trophy.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 187,
+      "height": 214
+    },
+    {
+      "slug": "trophy",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/trophy-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 224,
+      "height": 231
+    },
+    {
+      "slug": "microphone",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/microphone.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 142,
+      "height": 208
+    },
+    {
+      "slug": "microphone",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/microphone-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 195,
+      "height": 229
+    },
+    {
+      "slug": "lantern",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/lantern.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 137,
+      "height": 230
+    },
+    {
+      "slug": "lantern",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/lantern-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 198,
+      "height": 239
+    },
+    {
+      "slug": "controller",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/controller.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 194,
+      "height": 169
+    },
+    {
+      "slug": "controller",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/controller-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 205,
+      "height": 229
+    },
+    {
+      "slug": "clipboard",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/clipboard.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 171,
+      "height": 208
+    },
+    {
+      "slug": "clipboard",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/clipboard-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 219,
+      "height": 233
+    },
+    {
+      "slug": "gavel",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/gavel.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 191,
+      "height": 199
+    },
+    {
+      "slug": "gavel",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/gavel-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 224,
+      "height": 230
+    },
+    {
+      "slug": "broom",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/broom.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 165,
+      "height": 220
+    },
+    {
+      "slug": "broom",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/broom-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 198,
+      "height": 230
+    },
+    {
+      "slug": "flag",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/flag.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 188,
+      "height": 212
+    },
+    {
+      "slug": "flag",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/flag-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 233,
+      "height": 229
+    },
+    {
+      "slug": "pizza-peel",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/pizza-peel.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 156,
+      "height": 193
+    },
+    {
+      "slug": "pizza-peel",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/pizza-peel-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 213,
+      "height": 230
+    },
+    {
+      "slug": "accordion",
+      "category": "held_item",
+      "variant": "standalone",
+      "path": "/goose-assets/held-items/accordion.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 197,
+      "height": 169
+    },
+    {
+      "slug": "accordion",
+      "category": "held_item",
+      "variant": "bust-preview",
+      "path": "/goose-assets/held-items/accordion-bust-preview.png",
+      "sourceFile": "weapon+examples.png",
+      "width": 237,
+      "height": 229
+    },
+    {
+      "slug": "poncho",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/poncho.png",
+      "sourceFile": "chest_examples.png",
+      "width": 242,
+      "height": 191
+    },
+    {
+      "slug": "poncho",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/poncho-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 226,
+      "height": 299
+    },
+    {
+      "slug": "bow-tie",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/bow-tie.png",
+      "sourceFile": "chest_examples.png",
+      "width": 193,
+      "height": 142
+    },
+    {
+      "slug": "bow-tie",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/bow-tie-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 227,
+      "height": 293
+    },
+    {
+      "slug": "spike-collar",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/spike-collar.png",
+      "sourceFile": "chest_examples.png",
+      "width": 243,
+      "height": 146
+    },
+    {
+      "slug": "spike-collar",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/spike-collar-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 226,
+      "height": 293
+    },
+    {
+      "slug": "gold-chain",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/gold-chain.png",
+      "sourceFile": "chest_examples.png",
+      "width": 222,
+      "height": 173
+    },
+    {
+      "slug": "gold-chain",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/gold-chain-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 226,
+      "height": 294
+    },
+    {
+      "slug": "medal",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/medal.png",
+      "sourceFile": "chest_examples.png",
+      "width": 168,
+      "height": 204
+    },
+    {
+      "slug": "medal",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/medal-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 226,
+      "height": 294
+    },
+    {
+      "slug": "scarf",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/scarf.png",
+      "sourceFile": "chest_examples.png",
+      "width": 196,
+      "height": 222
+    },
+    {
+      "slug": "scarf",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/scarf-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 226,
+      "height": 294
+    },
+    {
+      "slug": "security-badge",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/security-badge.png",
+      "sourceFile": "chest_examples.png",
+      "width": 167,
+      "height": 184
+    },
+    {
+      "slug": "security-badge",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/security-badge-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 225,
+      "height": 295
+    },
+    {
+      "slug": "armor-plate",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/armor-plate.png",
+      "sourceFile": "chest_examples.png",
+      "width": 215,
+      "height": 195
+    },
+    {
+      "slug": "armor-plate",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/armor-plate-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 226,
+      "height": 295
+    },
+    {
+      "slug": "feather-boa",
+      "category": "neck",
+      "variant": "standalone",
+      "path": "/goose-assets/neck/feather-boa.png",
+      "sourceFile": "chest_examples.png",
+      "width": 233,
+      "height": 216
+    },
+    {
+      "slug": "feather-boa",
+      "category": "neck",
+      "variant": "bust-preview",
+      "path": "/goose-assets/neck/feather-boa-bust-preview.png",
+      "sourceFile": "chest_examples.png",
+      "width": 225,
+      "height": 295
+    },
+    {
+      "slug": "fire-aura",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/fire-aura.png",
+      "sourceFile": "aura+examples.png",
+      "width": 239,
+      "height": 277
+    },
+    {
+      "slug": "fire-aura",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/fire-aura-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 248,
+      "height": 288
+    },
+    {
+      "slug": "hologram-shimmer",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/hologram-shimmer.png",
+      "sourceFile": "aura+examples.png",
+      "width": 239,
+      "height": 270
+    },
+    {
+      "slug": "hologram-shimmer",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/hologram-shimmer-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 235,
+      "height": 275
+    },
+    {
+      "slug": "lightning-crackle",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/lightning-crackle.png",
+      "sourceFile": "aura+examples.png",
+      "width": 236,
+      "height": 247
+    },
+    {
+      "slug": "lightning-crackle",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/lightning-crackle-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 250,
+      "height": 283
+    },
+    {
+      "slug": "smoke",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/smoke.png",
+      "sourceFile": "aura+examples.png",
+      "width": 249,
+      "height": 256
+    },
+    {
+      "slug": "smoke",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/smoke-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 252,
+      "height": 301
+    },
+    {
+      "slug": "crown-glow",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/crown-glow.png",
+      "sourceFile": "aura+examples.png",
+      "width": 229,
+      "height": 230
+    },
+    {
+      "slug": "crown-glow",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/crown-glow-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 224,
+      "height": 308
+    },
+    {
+      "slug": "achievement-sparkle",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/achievement-sparkle.png",
+      "sourceFile": "aura+examples.png",
+      "width": 235,
+      "height": 228
+    },
+    {
+      "slug": "achievement-sparkle",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/achievement-sparkle-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 235,
+      "height": 287
+    },
+    {
+      "slug": "toxic-ooze",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/toxic-ooze.png",
+      "sourceFile": "aura+examples.png",
+      "width": 243,
+      "height": 254
+    },
+    {
+      "slug": "toxic-ooze",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/toxic-ooze-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 252,
+      "height": 275
+    },
+    {
+      "slug": "heart-particles",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/heart-particles.png",
+      "sourceFile": "aura+examples.png",
+      "width": 223,
+      "height": 231
+    },
+    {
+      "slug": "heart-particles",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/heart-particles-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 231,
+      "height": 268
+    },
+    {
+      "slug": "verified-security-glyph",
+      "category": "aura",
+      "variant": "standalone",
+      "path": "/goose-assets/auras/verified-security-glyph.png",
+      "sourceFile": "aura+examples.png",
+      "width": 242,
+      "height": 234
+    },
+    {
+      "slug": "verified-security-glyph",
+      "category": "aura",
+      "variant": "bust-preview",
+      "path": "/goose-assets/auras/verified-security-glyph-bust-preview.png",
+      "sourceFile": "aura+examples.png",
+      "width": 267,
+      "height": 269
+    }
+  ]
+}

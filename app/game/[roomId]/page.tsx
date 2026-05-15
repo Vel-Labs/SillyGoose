@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { AiPlayerTwoButton } from "@/components/ai-player-two-button";
 import { MysteryGooseCard } from "@/components/arcade-primitives";
 import { PageShell } from "@/components/brand-shell";
 import { GameRoomActions } from "@/components/game-room-actions";
@@ -34,11 +35,15 @@ export default async function GameRoomPage({ params }: { params: Promise<{ roomI
           </div>
           <GameRoomActions joinPath={joinPath} spectatorPath={spectatorPath} />
         </div>
-        <div className="game-room-layout grid items-start gap-4 lg:grid-cols-[220px_minmax(380px,1fr)_220px]">
+        <div className="game-room-layout grid items-start gap-4 lg:grid-cols-[210px_minmax(520px,1fr)_210px]">
           <VerifiedPlayerBadge name={playerOne.shortName} label="Player One" side="red" goose={playerOne.key} featured />
           <TicTacToeBoard initialRoom={room} viewerMark={viewerMark} />
           <div>
-            {playerTwo ? (
+            {room.aiMode && playerTwo ? (
+              <VerifiedPlayerBadge name={`${playerTwo.shortName} AI`} label="Player Two" side="blue" goose={playerTwo.key} featured verified />
+            ) : room.aiMode ? (
+              <MysteryGooseCard mode="ai" />
+            ) : playerTwo ? (
               <VerifiedPlayerBadge name={playerTwo.shortName} label="Player Two" side="blue" goose={playerTwo.key} featured verified />
             ) : (
               <MysteryGooseCard />
@@ -46,6 +51,7 @@ export default async function GameRoomPage({ params }: { params: Promise<{ roomI
             {!room.players.O ? (
               <div className="mt-4 rounded-sm border-2 border-black bg-black/75 p-3 text-xs font-black uppercase text-parchment/75">
                 Awaiting Rival Goose. Waiting for Player Two to open the join page and authenticate with their Ledger Security Key.
+                {viewerMark === "X" ? <AiPlayerTwoButton roomId={room.id} /> : null}
               </div>
             ) : null}
           </div>

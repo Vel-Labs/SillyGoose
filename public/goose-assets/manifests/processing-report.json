@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-05-14T23:08:29.496Z",
+  "sourceDir": "/Users/steven/Workspace/40_Code/client-work/Silly-Goose-Demo/reference-art/goose_sprites",
+  "outputRoot": "/Users/steven/Workspace/40_Code/client-work/Silly-Goose-Demo/silly-goose-ledger-demo/public/goose-assets",
+  "discoveredFiles": [
+    "aura+examples.png",
+    "base+pfp+weapon-arm+bill.png",
+    "bill_accessory+examples.png",
+    "chest_examples.png",
+    "eyes+examples.png",
+    "hats+examples.png",
+    "weapon+examples.png"
+  ],
+  "filesProcessed": [
+    {
+      "file": "base+pfp+weapon-arm+bill.png",
+      "width": 1122,
+      "height": 1402,
+      "assets": 20
+    },
+    {
+      "file": "hats+examples.png",
+      "width": 887,
+      "height": 1774,
+      "assets": 32
+    },
+    {
+      "file": "eyes+examples.png",
+      "width": 887,
+      "height": 1774,
+      "assets": 18
+    },
+    {
+      "file": "bill_accessory+examples.png",
+      "width": 887,
+      "height": 1774,
+      "assets": 24
+    },
+    {
+      "file": "weapon+examples.png",
+      "width": 887,
+      "height": 1774,
+      "assets": 28
+    },
+    {
+      "file": "chest_examples.png",
+      "width": 887,
+      "height": 1774,
+      "assets": 18
+    },
+    {
+      "file": "aura+examples.png",
+      "width": 887,
+      "height": 1774,
+      "assets": 18
+    }
+  ],
+  "expectedAssetCount": 158,
+  "assetsEmitted": 158,
+  "assetsByCategory": {
+    "base": 20,
+    "hat": 32,
+    "eyes": 18,
+    "bill_item": 24,
+    "held_item": 28,
+    "neck": 18,
+    "aura": 18
+  },
+  "skippedCells": [],
+  "warnings": [
+    {
+      "asset": "/goose-assets/eyes/monocle.png",
+      "sourceFile": "eyes+examples.png",
+      "code": "magenta-remains",
+      "message": "Possible chroma-key background remains in the output."
+    },
+    {
+      "asset": "/goose-assets/eyes/reading-glasses.png",
+      "sourceFile": "eyes+examples.png",
+      "code": "magenta-remains",
+      "message": "Possible chroma-key background remains in the output."
+    },
+    {
+      "asset": "/goose-assets/bill-items/glow-stick.png",
+      "sourceFile": "bill_accessory+examples.png",
+      "code": "magenta-remains",
+      "message": "Possible chroma-key background remains in the output."
+    },
+    {
+      "asset": "/goose-assets/auras/hologram-shimmer.png",
+      "sourceFile": "aura+examples.png",
+      "code": "magenta-remains",
+      "message": "Possible chroma-key background remains in the output."
+    },
+    {
+      "asset": "/goose-assets/auras/lightning-crackle.png",
+      "sourceFile": "aura+examples.png",
+      "code": "magenta-remains",
+      "message": "Possible chroma-key background remains in the output."
+    }
+  ]
+}

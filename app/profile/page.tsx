@@ -45,7 +45,7 @@ export default async function ProfilePage() {
 
   return (
     <PageShell>
-      <section className="app-width mx-auto w-full px-4 pb-4 sm:px-6">
+      <section className="app-width mx-auto w-full px-4 pb-2 sm:px-6">
         <div className="poster-border dashboard-frame profile-card-frame p-3">
           <Panel className="profile-hero-card p-3">
             <GoosePortrait goose={preferredGoose.key} className="profile-trading-goose selected-goose" priority imageClassName="goose-framed-image" />
@@ -73,10 +73,10 @@ export default async function ProfilePage() {
             </div>
           </Panel>
 
-          <div className="mt-3 grid gap-3 xl:grid-cols-[.85fr_1.15fr]">
-            <Panel className="p-3">
+          <div className="profile-middle-row mt-3 grid gap-3 xl:grid-cols-[.7fr_1.3fr]">
+            <Panel className="compact-profile-section p-3">
               <SectionHeader>Overall Stats</SectionHeader>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 <StatCard icon={Gamepad2} label="Matches" value={stats.matchesPlayed.toString()} detail="Verified match archive" />
                 <StatCard icon={Sparkles} label="Win Rate" value={`${winRate}%`} detail="Draws count as pond diplomacy" />
                 <StatCard icon={Trophy} label="Honk Rating" value={stats.overallRating.toLocaleString()} detail="Derived from outcomes" />
@@ -84,9 +84,9 @@ export default async function ProfilePage() {
               </div>
             </Panel>
 
-            <Panel className="p-3">
+            <Panel className="compact-profile-section p-3">
               <SectionHeader>Game Ratings</SectionHeader>
-              <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+              <div className="profile-record-grid mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-5">
                 <GameRecordCard record={tictacRecord} active />
                 {stats.gameRecords.filter((record) => record.gameId !== "ticTacToe").map((record) => (
                   <GameRecordCard key={record.gameId} record={record} />
@@ -95,19 +95,19 @@ export default async function ProfilePage() {
             </Panel>
           </div>
 
-          <div className="mt-3 grid gap-3 xl:grid-cols-[1fr_.8fr]">
-            <Panel className="p-3">
+          <div className="profile-bottom-row mt-3 grid gap-3 xl:grid-cols-[1fr_.8fr]">
+            <Panel className="compact-profile-section scrollable-profile-panel p-3">
               <SectionHeader>Achievements</SectionHeader>
-              <div className="mt-3 grid gap-3 md:grid-cols-3">
+              <div className="mt-3 grid gap-2 md:grid-cols-3">
                 <AchievementCard icon={ShieldCheck} title="Verified Competitor" detail="Finish one verified match without fleeing the pond." unlocked={stats.matchesPlayed > 0} />
                 <AchievementCard icon={Medal} title="First Honk" detail="Win a match and make it everybody else's problem." unlocked={stats.wins > 0} />
                 <AchievementCard icon={Trophy} title="Pond Regular" detail="Ten matches unlocks a suspiciously official badge." unlocked={stats.matchesPlayed >= 10} />
               </div>
             </Panel>
 
-            <Panel className="p-3">
+            <Panel className="compact-profile-section scrollable-profile-panel p-3">
               <SectionHeader>Recent Activity</SectionHeader>
-              <div className="mt-3 grid gap-3">
+              <div className="profile-activity-columns mt-3">
                 <ActivityFeed title="Game Activity" items={gameActivity.length ? gameActivity : ["No completed game outcomes yet."]} />
                 <ActivityFeed title="Achievement Activity" items={achievementActivity} />
               </div>

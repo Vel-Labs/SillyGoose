@@ -11,6 +11,9 @@
     "typecheck": "tsc --noEmit",
     "validate:scaffold": "tsx scripts/validate-scaffold.ts",
     "validate:contracts": "tsx scripts/validate-contracts.ts",
+    "assets:process-goose-sprites": "tsx scripts/process-goose-sprites.ts",
+    "assets:audit-goose-sprites": "tsx scripts/audit-goose-assets.ts",
+    "seed:flockerroom:sql": "tsx scripts/seed-flockerroom-catalog.ts",
     "check": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
@@ -24,6 +27,7 @@
     "next": "^15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {

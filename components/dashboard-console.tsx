@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Anchor, Coins, Gamepad2, Grid2X2, LockKeyhole, Medal, Radar, ShieldCheck, ShipWheel, Sparkles, Swords, Trophy, Users, type LucideIcon } from "lucide-react";
+import { Anchor, Coins, Eye, Gamepad2, Grid2X2, LockKeyhole, Medal, Radar, ShieldCheck, ShipWheel, Sparkles, Swords, Trophy, Users, type LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Panel, SectionHeader } from "@/components/arcade-primitives";
 import { GameLibrary } from "@/components/game-library";
@@ -158,6 +158,8 @@ async function postJson(path: string, body: unknown) {
 
 function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: GameOutcome[]; userId: string; onChangeGoose: () => void }) {
   const [gooseKey, setGooseKey] = useState<GooseKey>("captain");
+  const [flockCode, setFlockCode] = useState("");
+  const [expandedGame, setExpandedGame] = useState("");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const goose = findGoose(gooseKey);
@@ -193,6 +195,31 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
     }
   }
 
+  function normalizedFlockCode() {
+    const trimmed = flockCode.trim();
+    if (!trimmed) {
+      setError("Enter a Flock Code first.");
+      return null;
+    }
+    return trimmed.toLowerCase().startsWith("tictac_") ? trimmed : `tictac_${trimmed.toUpperCase()}`;
+  }
+
+  function joinGame() {
+    setStatus("");
+    setError("");
+    const roomId = normalizedFlockCode();
+    if (!roomId) return;
+    window.location.href = `/join/${roomId}`;
+  }
+
+  function spectateGame() {
+    setStatus("");
+    setError("");
+    const roomId = normalizedFlockCode();
+    if (!roomId) return;
+    window.location.href = `/game/${roomId}`;
+  }
+
   return (
     <section className="dashboard-overview-grid">
       <Panel as="article" className="dashboard-overview-goose">
@@ -222,24 +249,59 @@ function DashboardOverview({ outcomes, userId, onChangeGoose }: { outcomes: Game
       <Panel as="article" className="dashboard-overview-games">
         <SectionHeader>Play Next</SectionHeader>
         <div className="mt-3 grid gap-3">
-          <div className="game-launch-panel game-launch-panel-primary">
-            <div>
-              <p className="text-[11px] font-black uppercase text-signal">Next Verified Match</p>
-              <h3 className="brush-title mt-1 text-2xl leading-none text-white">Tic-Tac-Toe is ready.</h3>
-              <p className="mt-2 text-xs font-black uppercase leading-snug text-parchment/70">Challenge another human-verified goose with Security Key-backed turns.</p>
-            </div>
-            <Button type="button" onClick={() => openTicTacToe()} className="min-h-11 px-4 py-2 text-xs">
-              <Users className="h-4 w-4" />
-              Play Tic-Tac-Toe
-            </Button>
-          </div>
           {overviewGames.map((game) => {
             const Icon = game.icon;
+            const expanded = expandedGame === game.title;
             return (
-              <div key={game.title} className="wood-game-box wood-game-box-locked" aria-disabled="true">
-                <Icon className="h-5 w-5" />
-                <span>{game.title}</span>
-                <strong>{game.status}</strong>
+              <div key={game.title} className="grid gap-2">
+                <button
+                  type="button"
+                  onClick={() => setExpandedGame(expanded ? "" : game.title)}
+                  className={`wood-game-box ${game.available ? "wood-game-box-live" : "wood-game-box-locked"} ${expanded ? "wood-game-box-active" : ""}`}
+                  aria-expanded={expanded}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{game.title}</span>
+                  <strong>{game.status}</strong>
+                </button>
+                {expanded && game.available ? (
+                  <div className="game-launch-panel game-launch-panel-primary">
+                    <div>
+                      <p className="text-[11px] font-black uppercase text-signal">Next Verified Match</p>
+                      <h3 className="brush-title mt-1 text-2xl leading-none text-white">Ready for the Pond.</h3>
+                      <p className="mt-2 whitespace-nowrap text-[11px] font-black uppercase leading-none text-parchment/70">Start or Join a Flock, or Spectate the Pond.</p>
+                    </div>
+                    <div className="game-action-grid mt-2">
+                      <Button type="button" onClick={() => openTicTacToe()} title="Open a fresh verified room." className="min-h-10 px-3 py-2 text-xs">
+                        <Users className="h-4 w-4" />
+                        Start
+                      </Button>
+                      <Button type="button" variant="secondary" onClick={joinGame} title="Enter a Flock Code and bring your own goose." className="min-h-10 px-3 py-2 text-xs">
+                        <LockKeyhole className="h-4 w-4" />
+                        Join
+                      </Button>
+                      <Button type="button" variant="ghost" onClick={spectateGame} title="Watch the pond without touching the board." className="min-h-10 px-3 py-2 text-xs">
+                        <Eye className="h-4 w-4" />
+                        Spectate
+                      </Button>
+                    </div>
+                    <label className="mt-2 grid gap-1 text-[10px] font-black uppercase text-parchment/62">
+                      Flock Code for Join / Spectate
+                      <input
+                        value={flockCode}
+                        onChange={(event) => setFlockCode(event.target.value)}
+                        placeholder="TICTAC_F433"
+                        className="flock-code-input"
+                      />
+                    </label>
+                  </div>
+                ) : null}
+                {expanded && !game.available ? (
+                  <div className="game-launch-panel">
+                    <p className="text-[11px] font-black uppercase text-signal">{game.title} is still in pond review.</p>
+                    <p className="mt-1 text-[11px] font-black uppercase leading-snug text-parchment/60">This flock is assembling paperwork, snacks, and legally questionable confidence.</p>
+                  </div>
+                ) : null}
               </div>
             );
           })}

@@ -1,4 +1,5 @@
 import { newId, updateStore, type GameOutcome, type GameRoom } from "@/lib/auth/store";
+import { gooseRoster } from "@/lib/goose-roster";
 
 const TIC_TAC_TOE_KEY = "tictac";
 
@@ -88,6 +89,19 @@ export async function joinRoom(roomId: string, userId: string, goose = "El Jefe 
   });
 }
 
+export async function assignAiPlayerTwo(roomId: string, userId: string) {
+  return updateStore((store) => {
+    const room = store.rooms.find((candidate) => candidate.id === roomId);
+    if (!room) throw new Error("Room not found.");
+    if (room.players.X?.userId !== userId) throw new Error("Only Player One can summon the suspicious pond algorithm.");
+    if (room.players.O && room.players.O.userId !== "offline-minimax-demo") throw new Error("A human Player Two already owns this room.");
+    if (room.winner || room.moves.length > 0) throw new Error("AI can only join before the first honk lands.");
+    room.aiMode = true;
+    room.players.O = { userId: "offline-minimax-demo", goose: randomAiGoose(room.players.X?.goose), verifiedAt: new Date().toISOString() };
+    return room;
+  });
+}
+
 export function markForUser(room: GameRoom, userId: string): "X" | "O" | null {
   if (room.players.X?.userId === userId) return "X";
   if (room.players.O?.userId === userId) return "O";
@@ -165,4 +179,11 @@ function findLineMove(board: GameRoom["board"], mark: "X" | "O") {
     if (marks === 2 && blanks.length === 1) return blanks[0];
   }
   return null;
+}
+
+function randomAiGoose(playerOneGoose?: string) {
+  const choices = gooseRoster
+    .filter((goose) => goose.key !== "ai" && goose.key !== playerOneGoose)
+    .map((goose) => goose.key);
+  return choices[crypto.getRandomValues(new Uint32Array(1))[0] % choices.length] ?? "ai";
 }
