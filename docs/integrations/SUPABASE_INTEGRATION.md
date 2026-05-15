@@ -84,6 +84,8 @@ SUPABASE_SCHEMA=silly_goose_entertainment
 SUPABASE_SECRET_KEY=sb_secret_...
 ```
 
+Because this project stores app data in the private `silly_goose_entertainment` schema, Supabase must expose that schema through the project Data API before the Vercel server can use the REST adapter. In the Supabase dashboard, add `silly_goose_entertainment` to the exposed schemas list while keeping browser table access disabled and using only the server-side `SUPABASE_SECRET_KEY`.
+
 For local migrations or direct SQL, also fill:
 
 ```text
@@ -112,11 +114,10 @@ If Silly Goose Entertainment gets a custom domain later, replace all three produ
 
 ## Implementation Path
 
-1. Add `@supabase/supabase-js` for a server-side database client. Add `@supabase/ssr` only if Supabase Auth/cookie helpers become part of the app; the current WebAuthn flow does not require Supabase Auth.
-2. Create a `lib/store` adapter boundary with the existing JSON implementation and a Supabase implementation behind the same methods.
-3. Move `lib/auth/store.ts` callers to the adapter boundary without changing route behavior.
-4. Create SQL migrations for the tables above, with RLS enabled from the start.
-5. Run the existing room and WebAuthn route checks against both `local` and `supabase` adapter modes before changing the demo default.
+1. Keep `lib/auth/store.ts` as the adapter boundary. It uses the local JSON store by default and the server-side Supabase REST adapter when `DEMO_STORE_ADAPTER=supabase` or `DEMO_SUPABASE_ENABLED=true`.
+2. Create SQL migrations for the tables above, with RLS enabled from the start.
+3. Expose the `silly_goose_entertainment` schema through Supabase's Data API before enabling the Vercel adapter.
+4. Run the existing room and WebAuthn route checks against both `local` and `supabase` adapter modes before changing the demo default.
 
 Supabase's current Next.js guidance uses `NEXT_PUBLIC_SUPABASE_URL` plus `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for browser-safe clients, and the newer `sb_publishable_*` / `sb_secret_*` key family is preferred over legacy `anon` / `service_role` keys. The secret key is server-only and bypasses RLS, so it must be paired with application-level authorization checks.
 

@@ -14,6 +14,8 @@ import { getOrCreateUser, readStore, updateStore, type DemoUser, type PasskeyCre
 export const rpName = "Silly Goose Entertainment";
 
 export function getOrigin(request: Request) {
+  if (process.env.WEBAUTHN_ORIGIN) return process.env.WEBAUTHN_ORIGIN;
+  if (process.env.NEXT_PUBLIC_APP_ORIGIN) return process.env.NEXT_PUBLIC_APP_ORIGIN;
   const origin = request.headers.get("origin");
   if (origin) return origin;
   const url = new URL(request.url);
@@ -21,6 +23,7 @@ export function getOrigin(request: Request) {
 }
 
 export function getRpID(request: Request) {
+  if (process.env.WEBAUTHN_RP_ID) return process.env.WEBAUTHN_RP_ID;
   return new URL(getOrigin(request)).hostname;
 }
 
