@@ -37,7 +37,7 @@ create table if not exists silly_goose_entertainment.challenges (
   challenge_key text primary key,
   value text not null,
   user_id text references silly_goose_entertainment.demo_users(id) on delete cascade,
-  purpose text not null check (purpose in ('register', 'login', 'admin', 'player2')),
+  purpose text not null check (purpose in ('register', 'login', 'admin', 'player2', 'wallet-proof')),
   created_at timestamptz not null default now(),
   expires_at timestamptz
 );
@@ -90,7 +90,7 @@ create table if not exists silly_goose_entertainment.room_moves (
 
 create table if not exists silly_goose_entertainment.game_outcomes (
   id text primary key,
-  room_id text not null unique references silly_goose_entertainment.game_rooms(id) on delete cascade,
+  room_id text not null references silly_goose_entertainment.game_rooms(id) on delete cascade,
   game_key text not null default 'tictac' check (game_key in ('tictac')),
   winner text not null check (winner in ('X', 'O', 'draw')),
   board jsonb not null,
@@ -174,9 +174,62 @@ create table if not exists silly_goose_entertainment.linked_wallets (
   unique (chain, address)
 );
 
+create table if not exists silly_goose_entertainment.signed_rivalry_challenges (
+  id text primary key,
+  nonce text not null unique,
+  challenger_user_id text not null references silly_goose_entertainment.demo_users(id) on delete cascade,
+  rival_user_id text not null references silly_goose_entertainment.demo_users(id) on delete cascade,
+  room_id text references silly_goose_entertainment.game_rooms(id) on delete set null,
+  game_key text not null default 'tictac' check (game_key in ('tictac')),
+  linked_wallet_id text not null references silly_goose_entertainment.linked_wallets(id) on delete restrict,
+  wallet_address text not null,
+  signature text not null,
+  typed_data jsonb not null default '{}'::jsonb,
+  status text not null default 'signed' check (status in ('signed', 'accepted', 'expired')),
+  expires_at timestamptz not null,
+  created_at timestamptz not null default now(),
+  check (challenger_user_id <> rival_user_id)
+);
+
+create table if not exists silly_goose_entertainment.bread_transactions (
+  id text primary key,
+  user_id text not null references silly_goose_entertainment.demo_users(id) on delete cascade,
+  counterparty_user_id text references silly_goose_entertainment.demo_users(id) on delete set null,
+  amount integer not null check (amount <> 0),
+  kind text not null check (kind in ('reward', 'gg_tip', 'friend_transfer', 'stake_lock', 'stake_release')),
+  status text not null default 'posted' check (status in ('posted', 'locked', 'released')),
+  memo text not null,
+  challenge_id text references silly_goose_entertainment.signed_rivalry_challenges(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists silly_goose_entertainment.verified_pings (
+  id text primary key,
+  from_user_id text not null references silly_goose_entertainment.demo_users(id) on delete cascade,
+  to_user_id text not null references silly_goose_entertainment.demo_users(id) on delete cascade,
+  message text not null,
+  channel text not null default 'in_app' check (channel in ('in_app')),
+  status text not null default 'sent' check (status in ('sent', 'read')),
+  created_at timestamptz not null default now(),
+  check (from_user_id <> to_user_id)
+);
+
+create table if not exists silly_goose_entertainment.dogfood_feedback (
+  id text primary key,
+  user_id text not null references silly_goose_entertainment.demo_users(id) on delete cascade,
+  route text not null,
+  workflow text not null check (workflow in ('wallet-proof', 'signed-rivalry', 'bread-ledger', 'verified-ping', 'achievements', 'overall-dogfood')),
+  expected text not null,
+  actual text not null,
+  severity text not null default 'note' check (severity in ('note', 'blocked', 'bug', 'polish')),
+  service_mode text not null default 'local' check (service_mode in ('local', 'supabase', 'vercel')),
+  viewport text not null,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists silly_goose_entertainment.audit_entries (
   id text primary key,
-  type text not null check (type in ('admin', 'game', 'auth')),
+  type text not null check (type in ('admin', 'game', 'auth', 'wallet')),
   message text not null,
   user_id text references silly_goose_entertainment.demo_users(id) on delete set null,
   created_at timestamptz not null default now()
@@ -200,6 +253,16 @@ create index if not exists user_achievements_user_unlocked_idx
   on silly_goose_entertainment.user_achievements(user_id, unlocked_at desc);
 create index if not exists linked_wallets_user_id_idx
   on silly_goose_entertainment.linked_wallets(user_id);
+create index if not exists signed_rivalry_challenges_challenger_idx
+  on silly_goose_entertainment.signed_rivalry_challenges(challenger_user_id, created_at desc);
+create index if not exists signed_rivalry_challenges_rival_idx
+  on silly_goose_entertainment.signed_rivalry_challenges(rival_user_id, created_at desc);
+create index if not exists bread_transactions_user_created_idx
+  on silly_goose_entertainment.bread_transactions(user_id, created_at desc);
+create index if not exists verified_pings_recipient_created_idx
+  on silly_goose_entertainment.verified_pings(to_user_id, created_at desc);
+create index if not exists dogfood_feedback_user_created_idx
+  on silly_goose_entertainment.dogfood_feedback(user_id, created_at desc);
 create index if not exists audit_entries_created_at_idx
   on silly_goose_entertainment.audit_entries(created_at desc);
 
@@ -218,6 +281,10 @@ alter table silly_goose_entertainment.player_rivals enable row level security;
 alter table silly_goose_entertainment.achievements enable row level security;
 alter table silly_goose_entertainment.user_achievements enable row level security;
 alter table silly_goose_entertainment.linked_wallets enable row level security;
+alter table silly_goose_entertainment.signed_rivalry_challenges enable row level security;
+alter table silly_goose_entertainment.bread_transactions enable row level security;
+alter table silly_goose_entertainment.verified_pings enable row level security;
+alter table silly_goose_entertainment.dogfood_feedback enable row level security;
 alter table silly_goose_entertainment.audit_entries enable row level security;
 
 grant usage on schema silly_goose_entertainment to service_role;
@@ -235,4 +302,4 @@ comment on schema silly_goose_entertainment is
 comment on table silly_goose_entertainment.passkey_credentials is
   'WebAuthn credential metadata. Never expose public_key, counters, challenges, or sessions directly to browser clients.';
 comment on table silly_goose_entertainment.linked_wallets is
-  'Future optional wallet linkage. This does not replace the WebAuthn-rooted Silly Goose account.';
+  'Optional wallet proof linkage. This does not replace the WebAuthn-rooted Silly Goose account.';

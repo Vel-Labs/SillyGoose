@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Eye } from "lucide-react";
+import { Bot, Eye, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { GameRoom } from "@/lib/auth/store";
 import { findGoose } from "@/lib/goose-roster";
@@ -23,6 +23,33 @@ async function postJson(path: string, body: unknown) {
   return data;
 }
 
+const winLines = [
+  "claims the pond.",
+  "takes the office rivalry belt.",
+  "wins the verified honk-off.",
+  "becomes today's people's rival."
+];
+
+const drawLines = [
+  "Mutual honk containment.",
+  "The pond declares a stalemate.",
+  "Nobody blinked. Everybody honked.",
+  "A draw, but with suspicious confidence."
+];
+
+const resultSubcopy = [
+  "Verified move. Maximum feather drama.",
+  "Security Key-backed nonsense, properly logged.",
+  "Human-approved rivalry, no CPU confusion.",
+  "The audit trail saw everything."
+];
+
+function stableIndex(seed: string, size: number) {
+  let hash = 0;
+  for (const char of seed) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  return hash % size;
+}
+
 export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
   const [room, setRoom] = useState(initialRoom);
   const [error, setError] = useState("");
@@ -39,6 +66,12 @@ export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
   const winnerGoose = room.winner === "X" ? playerX : room.winner === "O" ? playerO : null;
   const playerXLoadingImage = `/geese/headshots/${playerX.key}.png`;
   const playerOLoadingImage = `/geese/headshots/${(playerO ?? mysteryGoose).key}.png`;
+  const opponentMode = room.aiMode ? "Offline AI Rival" : room.players.O ? "Human Rival" : "Awaiting Human Rival";
+  const opponentIcon = room.aiMode ? <Bot className="h-4 w-4" /> : <Users className="h-4 w-4" />;
+  const resultSeed = `${room.id}:${room.completedOutcomeId ?? room.moves.length}:${room.winner ?? "pending"}`;
+  const winLine = winLines[stableIndex(resultSeed, winLines.length)];
+  const drawLine = drawLines[stableIndex(resultSeed, drawLines.length)];
+  const subcopy = resultSubcopy[stableIndex(`${resultSeed}:subcopy`, resultSubcopy.length)];
   const isYourTurn = Boolean(viewerMark && room.turn === viewerMark && !room.winner);
   const canMove = Boolean(isYourTurn && !isMoving);
   const rematchNeeded = room.aiMode || room.players.O ? 2 : 1;
@@ -137,6 +170,26 @@ export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
           {!viewerMark ? <Eye className="h-4 w-4" /> : null}
           {room.winner ? "Match Complete" : isYourTurn ? "Your turn" : turnGoose ? `${turnGoose.shortName}'s turn` : "Player Two pending"}
         </div>
+        <div className="live-matchup-strip" aria-live="polite">
+          <div className="matchup-goose matchup-goose-x">
+            <Image src={`/geese/headshots/${playerX.key}.png`} alt="" width={48} height={48} />
+            <span>
+              <strong>{playerX.shortName}</strong>
+              <em>{viewerMark === "X" ? "You" : "Player One"}</em>
+            </span>
+          </div>
+          <div className="matchup-mode">
+            {opponentIcon}
+            <span>{opponentMode}</span>
+          </div>
+          <div className="matchup-goose matchup-goose-o">
+            <Image src={`/geese/headshots/${(playerO ?? mysteryGoose).key}.png`} alt="" width={48} height={48} />
+            <span>
+              <strong>{playerO?.shortName ?? "Pending"}</strong>
+              <em>{viewerMark === "O" ? "You" : room.aiMode ? "CPU" : room.players.O ? "Player Two" : "Invite sent"}</em>
+            </span>
+          </div>
+        </div>
         {!room.winner && turnGoose ? (
           <div className={`turn-side-callout ${room.turn === "X" ? "turn-side-callout-left" : "turn-side-callout-right"}`}>
             <p>Duck...Duck..</p>
@@ -210,10 +263,10 @@ export function TicTacToeBoard({ initialRoom, viewerMark }: Props) {
             </div>
             <div className="winner-modal-copy">
               <p className="brush-title text-4xl text-white">
-                {room.winner === "draw" ? "Mutual honk containment." : `${winnerGoose?.shortName ?? room.winner} claims the pond.`}
+                {room.winner === "draw" ? drawLine : `${winnerGoose?.shortName ?? room.winner} ${winLine}`}
               </p>
               <p className="mt-2 text-sm font-black uppercase text-parchment/90">
-                {room.winner === "draw" ? "Nobody blinked. Everybody honked." : winnerGoose?.catchphrase ?? "Verified move. Maximum feather drama."}
+                {room.winner === "draw" ? subcopy : winnerGoose?.catchphrase ?? subcopy}
               </p>
             </div>
           </div>

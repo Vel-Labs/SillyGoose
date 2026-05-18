@@ -23,7 +23,7 @@ describe("game engine persistence", () => {
     const { createRoom, joinRoom, makeMove } = await import("@/lib/game/engine");
     const { readStore } = await import("@/lib/auth/store");
 
-    const room = await createRoom("player-one", false, "captain");
+    const room = await createRoom("player-one", false, "captain", "X");
     expect(room.id).toMatch(/^tictac_[A-F0-9]{4}$/);
 
     await joinRoom(room.id, "player-two", "jefe");
@@ -44,5 +44,16 @@ describe("game engine persistence", () => {
       aiMode: false
     });
     expect(store.outcomes[0].moves.map((move) => move.index)).toEqual([0, 3, 1, 4, 2]);
+  });
+
+  it("can open a human room with Player Two going first", async () => {
+    const { createRoom, joinRoom, makeMove } = await import("@/lib/game/engine");
+
+    const room = await createRoom("player-one", false, "captain", "O");
+    await joinRoom(room.id, "player-two", "jefe");
+    const updated = await makeMove(room.id, "player-two", 4);
+
+    expect(updated.moves).toMatchObject([{ mark: "O", index: 4 }]);
+    expect(updated.turn).toBe("X");
   });
 });

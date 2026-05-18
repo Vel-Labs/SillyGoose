@@ -2,7 +2,10 @@ import { redirect } from "next/navigation";
 import { Crown, Gamepad2, Medal, ShieldCheck, Sparkles, Trophy, Users } from "lucide-react";
 import { AchievementCard, ActivityFeed, Panel, RatingBadge, SectionHeader, StatCard, StatusBadge } from "@/components/arcade-primitives";
 import { PageShell } from "@/components/brand-shell";
+import { DogfoodFeedbackPanel } from "@/components/dogfood-feedback-panel";
+import { GrowthLoopPanel } from "@/components/growth-loop-panel";
 import { GoosePortrait } from "@/components/goose-portrait";
+import { WalletProofPanel } from "@/components/wallet-proof-panel";
 import { getCurrentUser } from "@/lib/auth/session";
 import { readStore, type GameOutcome } from "@/lib/auth/store";
 import {
@@ -14,7 +17,9 @@ import {
   getWinRate,
   type GameRecord
 } from "@/lib/game-profile";
+import { getGrowthLoopSnapshot } from "@/lib/growth-loop";
 import { findGoose } from "@/lib/goose-roster";
+import { getPrimaryLinkedWallet } from "@/lib/wallet-proof";
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
@@ -26,6 +31,8 @@ export default async function ProfilePage() {
   });
   const preferredGoose = findGoose((outcomes[0]?.players.X?.userId === user.id ? outcomes[0]?.players.X?.goose : outcomes[0]?.players.O?.goose) ?? "captain");
   const stats = buildGooseProfileStats(user, outcomes, preferredGoose.key);
+  const linkedWallet = getPrimaryLinkedWallet(store.linkedWallets ?? [], user.id);
+  const growthLoop = await getGrowthLoopSnapshot(user);
   const rival = findRival(outcomes, user.id, store.users);
   const winRate = getWinRate(stats);
   const operatorClass = getOperatorClass(stats);
@@ -62,6 +69,7 @@ export default async function ProfilePage() {
             </div>
             <div className="profile-hero-record">
               <StatusBadge tone="verified">Security Key Profile</StatusBadge>
+              {linkedWallet ? <StatusBadge className="ml-2" tone="verified">Wallet Proof</StatusBadge> : <StatusBadge className="ml-2" tone="soon">Wallet Optional</StatusBadge>}
               <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                 <ProfileNumber label="Wins" value={stats.wins} />
                 <ProfileNumber label="Losses" value={stats.losses} />
@@ -93,6 +101,18 @@ export default async function ProfilePage() {
                 ))}
               </div>
             </Panel>
+          </div>
+
+          <div className="mt-3">
+            <WalletProofPanel wallet={linkedWallet} />
+          </div>
+
+          <div className="mt-3">
+            <GrowthLoopPanel initialSnapshot={growthLoop} />
+          </div>
+
+          <div className="mt-3">
+            <DogfoodFeedbackPanel />
           </div>
 
           <div className="profile-bottom-row mt-3 grid gap-3 xl:grid-cols-[1fr_.8fr]">

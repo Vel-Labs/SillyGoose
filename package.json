@@ -23,6 +23,7 @@
     "@simplewebauthn/server": "^13.2.2",
     "ajv": "^8.20.0",
     "clsx": "^2.1.1",
+    "ethers": "^6.16.0",
     "lucide-react": "^0.468.0",
     "next": "^15.3.3",
     "react": "^19.0.0",

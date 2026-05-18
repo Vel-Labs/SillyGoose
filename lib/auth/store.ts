@@ -29,14 +29,76 @@ export type Challenge = {
   key: string;
   value: string;
   userId?: string;
-  purpose: "register" | "login" | "admin" | "player2";
+  purpose: "register" | "login" | "admin" | "player2" | "wallet-proof";
   createdAt: string;
 };
 
 export type AuditEntry = {
   id: string;
-  type: "admin" | "game" | "auth";
+  type: "admin" | "game" | "auth" | "wallet";
   message: string;
+  createdAt: string;
+};
+
+export type LinkedWallet = {
+  id: string;
+  userId: string;
+  chain: string;
+  address: string;
+  verifiedAt: string;
+  lastSignatureChallenge?: string;
+  status: "linked" | "revoked";
+  createdAt: string;
+};
+
+export type SignedRivalryChallenge = {
+  id: string;
+  nonce: string;
+  challengerUserId: string;
+  rivalUserId: string;
+  roomId?: string;
+  gameKey: "tictac";
+  linkedWalletId: string;
+  walletAddress: string;
+  signature: string;
+  typedData: Record<string, unknown>;
+  status: "signed" | "accepted" | "expired";
+  expiresAt: string;
+  createdAt: string;
+};
+
+export type BreadTransaction = {
+  id: string;
+  userId: string;
+  counterpartyUserId?: string;
+  amount: number;
+  kind: "reward" | "gg_tip" | "friend_transfer" | "stake_lock" | "stake_release";
+  status: "posted" | "locked" | "released";
+  memo: string;
+  challengeId?: string;
+  createdAt: string;
+};
+
+export type VerifiedPing = {
+  id: string;
+  fromUserId: string;
+  toUserId: string;
+  message: string;
+  channel: "in_app";
+  status: "sent" | "read";
+  createdAt: string;
+};
+
+export type DogfoodFeedback = {
+  id: string;
+  userId: string;
+  route: string;
+  workflow: "wallet-proof" | "signed-rivalry" | "bread-ledger" | "verified-ping" | "achievements" | "overall-dogfood";
+  expected: string;
+  actual: string;
+  severity: "note" | "blocked" | "bug" | "polish";
+  serviceMode: "local" | "supabase" | "vercel";
+  viewport: string;
   createdAt: string;
 };
 
@@ -75,6 +137,11 @@ type DemoStore = {
   audits: AuditEntry[];
   rooms: GameRoom[];
   outcomes: GameOutcome[];
+  linkedWallets: LinkedWallet[];
+  rivalryChallenges: SignedRivalryChallenge[];
+  breadTransactions: BreadTransaction[];
+  verifiedPings: VerifiedPing[];
+  dogfoodFeedback: DogfoodFeedback[];
 };
 
 type SupabaseConfig = {
@@ -109,7 +176,12 @@ const emptyStore = (): DemoStore => ({
   challenges: [],
   audits: [],
   rooms: [],
-  outcomes: []
+  outcomes: [],
+  linkedWallets: [],
+  rivalryChallenges: [],
+  breadTransactions: [],
+  verifiedPings: [],
+  dogfoodFeedback: []
 });
 
 async function loadStore(): Promise<DemoStore> {
@@ -118,6 +190,11 @@ async function loadStore(): Promise<DemoStore> {
   try {
     const store = JSON.parse(await readFile(storePath, "utf8")) as DemoStore;
     store.outcomes ??= [];
+    store.linkedWallets ??= [];
+    store.rivalryChallenges ??= [];
+    store.breadTransactions ??= [];
+    store.verifiedPings ??= [];
+    store.dogfoodFeedback ??= [];
     for (const room of store.rooms ?? []) {
       room.gameKey ??= "tictac";
     }
@@ -141,7 +218,7 @@ class SupabaseStoreClient {
   constructor(private readonly config: SupabaseConfig) {}
 
   async loadStore(): Promise<DemoStore> {
-    const [users, credentials, sessions, challenges, audits, rooms, players, moves, outcomes] = await Promise.all([
+    const [users, credentials, sessions, challenges, audits, rooms, players, moves, outcomes, linkedWallets, rivalryChallenges, breadTransactions, verifiedPings, dogfoodFeedback] = await Promise.all([
       this.select<any>("demo_users", "select=id,handle,name,created_at&order=created_at.asc"),
       this.select<any>("passkey_credentials", "select=id,user_id,public_key,counter,transports,device_type,backed_up"),
       this.select<any>("sessions", "select=id,user_id,created_at&order=created_at.asc"),
@@ -150,7 +227,12 @@ class SupabaseStoreClient {
       this.select<any>("game_rooms", "select=id,game_key,board,turn,winner,ai_mode,rematch_votes,completed_outcome_id,created_at&order=created_at.desc"),
       this.select<any>("room_players", "select=room_id,mark,user_id,goose,verified_at"),
       this.select<any>("room_moves", "select=room_id,mark,square_index,created_at&order=created_at.asc"),
-      this.select<any>("game_outcomes", "select=id,room_id,game_key,winner,board,moves,players,ai_mode,completed_at&order=completed_at.desc")
+      this.select<any>("game_outcomes", "select=id,room_id,game_key,winner,board,moves,players,ai_mode,completed_at&order=completed_at.desc"),
+      this.select<any>("linked_wallets", "select=id,user_id,chain,address,verified_at,last_signature_challenge,status,created_at&order=verified_at.desc"),
+      this.select<any>("signed_rivalry_challenges", "select=id,nonce,challenger_user_id,rival_user_id,room_id,game_key,linked_wallet_id,wallet_address,signature,typed_data,status,expires_at,created_at&order=created_at.desc"),
+      this.select<any>("bread_transactions", "select=id,user_id,counterparty_user_id,amount,kind,status,memo,challenge_id,created_at&order=created_at.desc"),
+      this.select<any>("verified_pings", "select=id,from_user_id,to_user_id,message,channel,status,created_at&order=created_at.desc"),
+      this.select<any>("dogfood_feedback", "select=id,user_id,route,workflow,expected,actual,severity,service_mode,viewport,created_at&order=created_at.desc")
     ]);
 
     const credentialsByUser = new Map<string, PasskeyCredential[]>();
@@ -220,6 +302,63 @@ class SupabaseStoreClient {
         players: row.players ?? {},
         aiMode: row.ai_mode,
         completedAt: row.completed_at
+      })),
+      linkedWallets: linkedWallets.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        chain: row.chain,
+        address: row.address,
+        verifiedAt: row.verified_at,
+        lastSignatureChallenge: row.last_signature_challenge ?? undefined,
+        status: row.status,
+        createdAt: row.created_at
+      })),
+      rivalryChallenges: rivalryChallenges.map((row) => ({
+        id: row.id,
+        nonce: row.nonce,
+        challengerUserId: row.challenger_user_id,
+        rivalUserId: row.rival_user_id,
+        roomId: row.room_id ?? undefined,
+        gameKey: row.game_key ?? "tictac",
+        linkedWalletId: row.linked_wallet_id,
+        walletAddress: row.wallet_address,
+        signature: row.signature,
+        typedData: row.typed_data ?? {},
+        status: row.status,
+        expiresAt: row.expires_at,
+        createdAt: row.created_at
+      })),
+      breadTransactions: breadTransactions.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        counterpartyUserId: row.counterparty_user_id ?? undefined,
+        amount: Number(row.amount ?? 0),
+        kind: row.kind,
+        status: row.status,
+        memo: row.memo,
+        challengeId: row.challenge_id ?? undefined,
+        createdAt: row.created_at
+      })),
+      verifiedPings: verifiedPings.map((row) => ({
+        id: row.id,
+        fromUserId: row.from_user_id,
+        toUserId: row.to_user_id,
+        message: row.message,
+        channel: row.channel ?? "in_app",
+        status: row.status,
+        createdAt: row.created_at
+      })),
+      dogfoodFeedback: dogfoodFeedback.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        route: row.route,
+        workflow: row.workflow,
+        expected: row.expected,
+        actual: row.actual,
+        severity: row.severity,
+        serviceMode: row.service_mode,
+        viewport: row.viewport,
+        createdAt: row.created_at
       }))
     };
   }
@@ -279,6 +418,68 @@ class SupabaseStoreClient {
       type: audit.type,
       message: audit.message,
       created_at: audit.createdAt
+    })));
+
+    await this.replaceRows("linked_wallets", "id", (store.linkedWallets ?? []).map((wallet) => ({
+      id: wallet.id,
+      user_id: wallet.userId,
+      chain: wallet.chain,
+      address: wallet.address,
+      verified_at: wallet.verifiedAt,
+      last_signature_challenge: wallet.lastSignatureChallenge ?? null,
+      status: wallet.status,
+      created_at: wallet.createdAt
+    })));
+
+    await this.replaceRows("signed_rivalry_challenges", "id", (store.rivalryChallenges ?? []).map((challenge) => ({
+      id: challenge.id,
+      nonce: challenge.nonce,
+      challenger_user_id: challenge.challengerUserId,
+      rival_user_id: challenge.rivalUserId,
+      room_id: challenge.roomId ?? null,
+      game_key: challenge.gameKey,
+      linked_wallet_id: challenge.linkedWalletId,
+      wallet_address: challenge.walletAddress,
+      signature: challenge.signature,
+      typed_data: challenge.typedData,
+      status: challenge.status,
+      expires_at: challenge.expiresAt,
+      created_at: challenge.createdAt
+    })));
+
+    await this.replaceRows("bread_transactions", "id", (store.breadTransactions ?? []).map((transaction) => ({
+      id: transaction.id,
+      user_id: transaction.userId,
+      counterparty_user_id: transaction.counterpartyUserId ?? null,
+      amount: transaction.amount,
+      kind: transaction.kind,
+      status: transaction.status,
+      memo: transaction.memo,
+      challenge_id: transaction.challengeId ?? null,
+      created_at: transaction.createdAt
+    })));
+
+    await this.replaceRows("verified_pings", "id", (store.verifiedPings ?? []).map((ping) => ({
+      id: ping.id,
+      from_user_id: ping.fromUserId,
+      to_user_id: ping.toUserId,
+      message: ping.message,
+      channel: ping.channel,
+      status: ping.status,
+      created_at: ping.createdAt
+    })));
+
+    await this.replaceRows("dogfood_feedback", "id", (store.dogfoodFeedback ?? []).map((feedback) => ({
+      id: feedback.id,
+      user_id: feedback.userId,
+      route: feedback.route,
+      workflow: feedback.workflow,
+      expected: feedback.expected,
+      actual: feedback.actual,
+      severity: feedback.severity,
+      service_mode: feedback.serviceMode,
+      viewport: feedback.viewport,
+      created_at: feedback.createdAt
     })));
 
     await this.replaceRows("game_rooms", "id", store.rooms.map((room) => ({

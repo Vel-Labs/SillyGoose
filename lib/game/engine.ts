@@ -25,6 +25,10 @@ export function nextMark(mark: "X" | "O") {
   return mark === "X" ? "O" : "X";
 }
 
+function randomMark(): "X" | "O" {
+  return crypto.getRandomValues(new Uint32Array(1))[0] % 2 === 0 ? "X" : "O";
+}
+
 function shortRoomToken() {
   return crypto.randomUUID().replaceAll("-", "").slice(0, 4).toUpperCase();
 }
@@ -55,13 +59,22 @@ function recordOutcomeIfComplete(store: { outcomes: GameOutcome[] }, room: GameR
   store.outcomes.unshift(outcome);
 }
 
-export async function createRoom(userId: string, aiMode = false, goose = "Afro Goose with 3D Glasses") {
+function makeAiOpeningMove(room: GameRoom) {
+  if (!room.aiMode || room.turn !== "O" || room.winner || room.moves.length > 0 || !room.players.O) return;
+  const aiIndex = chooseAiMove(room.board);
+  room.board[aiIndex] = "O";
+  room.moves.push({ mark: "O", index: aiIndex, at: new Date().toISOString() });
+  room.winner = calculateWinner(room.board);
+  room.turn = room.winner ? room.turn : "X";
+}
+
+export async function createRoom(userId: string, aiMode = false, goose = "Afro Goose with 3D Glasses", openingMark = randomMark()) {
   return updateStore((store) => {
     const room: GameRoom = {
       id: createGameRoomId(new Set(store.rooms.map((candidate) => candidate.id))),
       gameKey: TIC_TAC_TOE_KEY,
       board: Array(9).fill(null),
-      turn: "X",
+      turn: openingMark,
       winner: null,
       players: {
         X: { userId, goose, verifiedAt: new Date().toISOString() }
@@ -72,6 +85,7 @@ export async function createRoom(userId: string, aiMode = false, goose = "Afro G
     };
     if (aiMode) {
       room.players.O = { userId: "offline-minimax-demo", goose: "ai", verifiedAt: new Date().toISOString() };
+      makeAiOpeningMove(room);
     }
     store.rooms.unshift(room);
     return room;
@@ -137,11 +151,12 @@ export async function makeMove(roomId: string, userId: string, index: number) {
 
 function resetBoard(room: GameRoom) {
   room.board = Array(9).fill(null);
-  room.turn = "X";
+  room.turn = randomMark();
   room.winner = null;
   room.moves = [];
   room.rematchVotes = [];
   room.completedOutcomeId = undefined;
+  makeAiOpeningMove(room);
 }
 
 export async function requestRematch(roomId: string, userId: string) {
