@@ -8,8 +8,8 @@ The copyable base schema contract lives in `SUPABASE_SCHEMA.sql`. The staged cos
 
 ## Recommended Connection Shape
 
-1. Keep `DEMO_STORE_ADAPTER=local` as the default for rehearsal and offline screen share.
-2. Add `DEMO_STORE_ADAPTER=supabase` only after the Supabase schema and adapter are implemented.
+1. Keep `DEMO_STORE_ADAPTER=local` only for offline rehearsal where losing local state is acceptable.
+2. Use `DEMO_STORE_ADAPTER=supabase` for dogfooding, Vercel, or any demo where Security Key registration must survive server restarts.
 3. Use Supabase from Next.js Route Handlers and Server Components for the first pass.
 4. Store privileged Supabase keys only in server-only environment variables.
 5. Expose `NEXT_PUBLIC_SUPABASE_*` only when adding an intentional browser feature such as Realtime spectators or public read-only state.
@@ -85,6 +85,16 @@ SUPABASE_SECRET_KEY=sb_secret_...
 ```
 
 Because this project stores app data in the private `silly_goose_entertainment` schema, Supabase must expose that schema through the project Data API before the Vercel server can use the REST adapter. In the Supabase dashboard, add `silly_goose_entertainment` to the exposed schemas list while keeping browser table access disabled and using only the server-side `SUPABASE_SECRET_KEY`.
+
+For local dogfooding on `npm run dev -- -p 3001`, pair Supabase persistence with local WebAuthn origin values:
+
+```bash
+NEXT_PUBLIC_APP_ORIGIN=http://localhost:3001
+WEBAUTHN_RP_ID=localhost
+WEBAUTHN_ORIGIN=http://localhost:3001
+```
+
+For the Vercel demo, set all three values to the exact deployed host before registering a Security Key there. A passkey registered on `localhost` will not satisfy a Vercel origin, and a Vercel passkey will not satisfy `localhost`.
 
 For local migrations or direct SQL, also fill:
 

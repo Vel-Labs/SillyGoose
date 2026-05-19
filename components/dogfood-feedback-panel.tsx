@@ -33,11 +33,11 @@ export function DogfoodFeedbackPanel() {
       });
       const body = await response.json();
       if (!response.ok) throw new Error(body.error ?? "Could not record feedback.");
-      setStatus("Dogfood feedback recorded.");
+      setStatus("Feedback recorded.");
       setExpected("");
       setActual("");
     } catch (feedbackError) {
-      setError(feedbackError instanceof Error ? feedbackError.message : "Dogfood feedback failed.");
+      setError(feedbackError instanceof Error ? feedbackError.message : "Feedback failed.");
     } finally {
       setIsSubmitting(false);
     }
@@ -47,8 +47,8 @@ export function DogfoodFeedbackPanel() {
     <div className="dogfood-feedback-panel">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="dogfood-kicker">Dogfood receipt</p>
-          <h2>Actionable Feedback</h2>
+          <p className="dogfood-kicker">Feedback Form</p>
+          <h2>Feedback Form</h2>
         </div>
         <StatusBadge tone="ready">Local first</StatusBadge>
       </div>
@@ -57,11 +57,11 @@ export function DogfoodFeedbackPanel() {
         <label>
           Workflow
           <select value={workflow} onChange={(event) => setWorkflow(event.target.value)}>
-            <option value="overall-dogfood">Overall dogfood</option>
+            <option value="overall-dogfood">Overall feedback</option>
             <option value="wallet-proof">Wallet Proof</option>
             <option value="signed-rivalry">Signed rivalry</option>
             <option value="bread-ledger">$Bread ledger</option>
-            <option value="verified-ping">Verified ping</option>
+            <option value="verified-ping">Game invite</option>
             <option value="achievements">Achievements</option>
           </select>
         </label>

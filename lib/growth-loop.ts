@@ -158,7 +158,7 @@ function buildAchievementList(flags: { matchesPlayed: number; walletLinked: bool
     { code: "wallet-proof", name: "Wallet Proof", category: "web3", unlocked: flags.walletLinked, detail: "Link a signed wallet proof without replacing Security Key identity." },
     { code: "signed-rival", name: "Signed Rival", category: "social", unlocked: flags.hasRivalry, detail: "Create an off-chain signed rivalry challenge." },
     { code: "bread-winner", name: "Bread Winner", category: "bread", unlocked: flags.hasBread, detail: "Record a non-redeemable $Bread reward, tip, transfer, or stake event." },
-    { code: "verified-ping", name: "Verified Ping", category: "flockerroom", unlocked: flags.hasPing, detail: "Send an in-app verified ping." },
+    { code: "verified-ping", name: "Game Invite", category: "flockerroom", unlocked: flags.hasPing, detail: "Send an in-app invite to a rival." },
     { code: "pond-regular", name: "Pond Regular", category: "streak", unlocked: flags.matchesPlayed >= 10, detail: "Ten matches proves a streak-worthy pond habit." },
     { code: "season-opener", name: "Season Opener", category: "seasonal", unlocked: flags.walletLinked && flags.hasBread, detail: "Pair Wallet Proof with the first $Bread loop of the season." }
   ];

@@ -74,12 +74,13 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
         window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
         window.alert(`Security Key registered and signed in as @${result.user?.handle ?? claimedHandle}.`);
       } else {
-        const options = await postJson("/api/webauthn/login/options", { handle: claimedHandle });
+        const rememberedHandle = window.localStorage.getItem(rememberedHandleKey);
+        const options = await postJson("/api/webauthn/login/options", rememberedHandle ? { handle: rememberedHandle } : {});
         setStatus("Approve the browser WebAuthn prompt with your Security Key.");
         const response = await startAuthentication({ optionsJSON: options });
-        const result = await postJson("/api/webauthn/login/verify", { handle: claimedHandle, response });
+        const result = await postJson("/api/webauthn/login/verify", rememberedHandle ? { handle: rememberedHandle, response } : { response });
         window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
-        window.alert(`Security Key sign-in remembered for @${result.user?.handle ?? claimedHandle}.`);
+        window.alert(`Security Key sign-in remembered for @${result.user?.handle ?? "your goose"}.`);
       }
       setStatus("Verified. Opening the requested goose room...");
       router.push(redirectTo);
@@ -90,19 +91,10 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
     }
   }
 
-  async function enterDemoMode() {
-    setError("");
-    setStatus("Opening visibly marked demo fallback mode...");
-    const claimedHandle = normalizeHandle(handle);
-    const result = await postJson("/api/webauthn/demo-session", { handle: claimedHandle });
-    window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
-    router.push(redirectTo === "/dashboard" ? "/dashboard?demo=fallback" : redirectTo);
-  }
-
   return (
     <div className="space-y-2">
       <label className="block text-xs font-black uppercase text-ink/70" htmlFor="goose-handle">
-        Goose handle
+        Goose handle for registration
       </label>
       <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
         <input
@@ -129,9 +121,6 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
           <span className="security-key-pill">Security Key required</span>
         </Button>
       </div>
-      <Button onClick={enterDemoMode} variant="ghost" className="w-full border-black bg-black/80 text-parchment/75">
-        Demo-only fallback
-      </Button>
       <div className="min-h-[112px] rounded-sm border-2 border-black bg-black/85 p-3 text-[10px] font-bold leading-tight text-parchment">
         <div className="mb-1 flex items-center gap-2 text-signal">
           <ShieldAlert className="h-4 w-4" /> Ledger DMK readiness

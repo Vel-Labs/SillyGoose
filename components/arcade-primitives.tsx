@@ -39,8 +39,8 @@ export function ActivityFeed({ title, items }: { title: string; items: string[] 
     <div className="profile-activity-panel">
       <h3>{title}</h3>
       <div className="mt-2 grid gap-1.5">
-        {items.slice(0, 4).map((item) => (
-          <div key={item} className="profile-activity-row">{item}</div>
+        {items.slice(0, 4).map((item, index) => (
+          <div key={`${title}-${index}-${item}`} className="profile-activity-row">{item}</div>
         ))}
       </div>
     </div>

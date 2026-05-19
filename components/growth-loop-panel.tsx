@@ -1,19 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { BellRing, Coins, Swords, Trophy } from "lucide-react";
+import { Coins, MailPlus, Swords, Trophy } from "lucide-react";
 import { StatusBadge } from "@/components/arcade-primitives";
+import { getPreferredBrowserWallet } from "@/lib/browser-wallet";
 import type { GrowthLoopSnapshot } from "@/lib/growth-loop";
-
-type EthereumProvider = {
-  request<T = unknown>(args: { method: string; params?: unknown[] }): Promise<T>;
-};
-
-declare global {
-  interface Window {
-    ethereum?: EthereumProvider;
-  }
-}
 
 export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLoopSnapshot }) {
   const [snapshot, setSnapshot] = useState(initialSnapshot);
@@ -38,11 +29,18 @@ export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLo
   }
 
   async function createRivalry() {
-    if (!window.ethereum) throw new Error("A browser wallet is needed to sign the off-chain rivalry challenge. Wallet Proof remains optional for basic play.");
+    const wallet = await getPreferredBrowserWallet();
+    if (!wallet) throw new Error("A browser wallet is needed to sign the off-chain rivalry challenge. Wallet Proof remains optional for basic play.");
     const preparedResponse = await fetch("/api/growth-loop/rivalry", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
     const prepared = await preparedResponse.json();
     if (!preparedResponse.ok) throw new Error(prepared.error ?? "Could not prepare signed rivalry.");
-    const signature = await window.ethereum.request<string>({
+    const accounts = await wallet.provider.request<string[]>({ method: "eth_requestAccounts" });
+    const selectedAddress = accounts[0];
+    if (!selectedAddress) throw new Error("No wallet account was selected.");
+    if (selectedAddress.toLowerCase() !== String(prepared.walletAddress).toLowerCase()) {
+      throw new Error(`Switch ${wallet.name} to the linked Wallet Proof account ${formatAddress(prepared.walletAddress)}, then sign the rivalry challenge.`);
+    }
+    const signature = await wallet.provider.request<string>({
       method: "eth_signTypedData_v4",
       params: [prepared.walletAddress, JSON.stringify({
         domain: prepared.typedData.domain,
@@ -76,19 +74,19 @@ export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLo
     const response = await fetch("/api/growth-loop/ping", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: "Verified honk. See you in the pond." })
+      body: JSON.stringify({ message: "Game invite: join me for a verified match." })
     });
     const body = await response.json();
-    if (!response.ok) throw new Error(body.error ?? "Verified ping failed.");
-    setMessage("Verified ping sent.");
+    if (!response.ok) throw new Error(body.error ?? "Game invite failed.");
+    setMessage("Game invite recorded.");
   }
 
   return (
     <div className="growth-loop-panel">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="growth-loop-kicker">Dogfood growth loop</p>
-          <h2>Rivals, $Bread, Pings</h2>
+          <p className="growth-loop-kicker">Profile actions</p>
+          <h2>Rivals, $Bread, Invites</h2>
         </div>
         <StatusBadge tone="ready">Off-chain</StatusBadge>
       </div>
@@ -96,7 +94,7 @@ export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLo
       <div className="growth-loop-grid">
         <GrowthCard icon={Swords} title="Signed Rivalry" value={`${snapshot.rivalryChallenges.length} signed`} detail={`Rival: ${snapshot.rival.handle}`} />
         <GrowthCard icon={Coins} title="$Bread Ledger" value={`${snapshot.breadBalance} $Bread`} detail="Non-redeemable demo value" />
-        <GrowthCard icon={BellRing} title="Verified Pings" value={`${snapshot.verifiedPings.length} sent`} detail="In-app server records" />
+        <GrowthCard icon={MailPlus} title="Game Invites" value={`${snapshot.verifiedPings.length} sent`} detail="In-app invites to your current rival" />
         <GrowthCard icon={Trophy} title="Achievements" value={`${snapshot.achievements.filter((item) => item.unlocked).length}/${snapshot.achievements.length}`} detail="Game, social, bread, web3, streak, seasonal, flockerroom" />
       </div>
 
@@ -110,8 +108,8 @@ export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLo
           Post $Bread Reward
         </button>
         <button type="button" onClick={() => runAction("ping")} disabled={busy !== null}>
-          <BellRing className="h-4 w-4" />
-          Send Verified Ping
+          <MailPlus className="h-4 w-4" />
+          Send Game Invite
         </button>
       </div>
 
@@ -140,4 +138,8 @@ function GrowthCard({ icon: Icon, title, value, detail }: { icon: typeof Swords;
       <em>{detail}</em>
     </div>
   );
+}
+
+function formatAddress(address: string) {
+  return `${String(address).slice(0, 6)}...${String(address).slice(-4)}`;
 }

@@ -20,7 +20,17 @@ npm run dev
 
 Open the local URL printed by Next, usually `http://localhost:3000`. If that port is occupied, run `npm run dev -- -p 3001`.
 
-Copy `.env.example` to `.env.local` and fill only the values needed for the demo mode you are running. The default local mode is file-backed and does not require Supabase.
+Copy `.env.example` to `.env.local` and fill only the values needed for the demo mode you are running. The default local mode is file-backed and does not require Supabase. For a stable dogfood/demo account that survives server restarts, use the server-side Supabase adapter:
+
+```bash
+DEMO_STORE_ADAPTER=supabase
+DEMO_SUPABASE_ENABLED=true
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_SCHEMA=silly_goose_entertainment
+SUPABASE_SECRET_KEY=sb_secret_...
+```
+
+WebAuthn credentials are origin-bound. For local development on port 3001, use `NEXT_PUBLIC_APP_ORIGIN=http://localhost:3001`, `WEBAUTHN_RP_ID=localhost`, and `WEBAUTHN_ORIGIN=http://localhost:3001`. For the Vercel demo, use the exact Vercel/custom-domain values in all three variables before registering that environment's Security Key credential.
 
 ## Ledger Sign-In And Friend Join
 
@@ -47,4 +57,4 @@ Ledger DMK prepares the physical device by connecting over browser WebHID and op
 
 MiniMax is checked through local environment readiness only. Without local credentials, the game uses a deterministic offline demo opponent.
 
-Supabase should be added as a server-side persistence adapter before it is exposed to the browser. See `docs/integrations/SUPABASE_INTEGRATION.md` for the recommended schema, env variables, and RLS boundary.
+Supabase should stay a server-side persistence adapter before it is exposed to the browser. See `docs/integrations/SUPABASE_INTEGRATION.md` for the recommended schema, env variables, and RLS boundary.

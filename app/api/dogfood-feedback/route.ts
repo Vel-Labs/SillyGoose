@@ -10,7 +10,7 @@ const serviceModes = ["local", "supabase", "vercel"] as const;
 
 export async function POST(request: Request) {
   const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ error: "Sign in before recording dogfood feedback." }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "Sign in before recording feedback." }, { status: 401 });
   const body = await request.json().catch(() => ({}));
 
   const workflow = workflows.includes(body.workflow) ? body.workflow : "overall-dogfood";
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const viewport = String(body.viewport ?? "unknown").trim() || "unknown";
 
   if (expected.length < 8 || actual.length < 8) {
-    return NextResponse.json({ error: "Dogfood feedback needs expected and actual notes with enough detail to act on." }, { status: 400 });
+    return NextResponse.json({ error: "Feedback needs expected and actual notes with enough detail to act on." }, { status: 400 });
   }
 
   const feedback = await updateStore((store) => {
@@ -41,6 +41,6 @@ export async function POST(request: Request) {
     store.dogfoodFeedback.unshift(entry);
     return entry;
   });
-  await addAudit(`${user.name} recorded dogfood feedback for ${workflow}.`, "game");
+  await addAudit(`${user.name} recorded feedback for ${workflow}.`, "game");
   return NextResponse.json({ ok: true, feedback });
 }

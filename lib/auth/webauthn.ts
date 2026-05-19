@@ -12,6 +12,7 @@ import { formatGooseHandle } from "./goose-handle";
 import { getOrCreateUser, readStore, updateStore, type DemoUser, type PasskeyCredential } from "./store";
 
 export const rpName = "Silly Goose Entertainment";
+const discoverableLoginChallengeKey = "login:discoverable";
 
 export function getOrigin(request: Request) {
   if (process.env.WEBAUTHN_ORIGIN) return process.env.WEBAUTHN_ORIGIN;
@@ -96,14 +97,42 @@ export async function verifyRegistration(request: Request, handle: string, respo
   return user;
 }
 
-export async function authenticationOptions(request: Request, handle: string, purpose: "login" | "admin" | "player2" = "login") {
+function findCredentialOwner(store: Awaited<ReturnType<typeof readStore>>, credentialId: string) {
+  for (const user of store.users) {
+    const credential = user.credentials.find((candidate) => candidate.id === credentialId);
+    if (credential) return { user, credential };
+  }
+  return null;
+}
+
+export async function authenticationOptions(request: Request, handle?: string, purpose: "login" | "admin" | "player2" = "login") {
   const store = await readStore();
-  const normalized = formatGooseHandle(handle);
-  const legacy = handle.trim().toLowerCase();
+  const normalized = handle ? formatGooseHandle(handle) : "";
+  const legacy = handle?.trim().toLowerCase() ?? "";
   const user = store.users.find((candidate) => {
     const stored = candidate.handle.toLowerCase();
     return stored === normalized.toLowerCase() || stored === legacy;
   });
+
+  if (purpose === "login" && !handle) {
+    const hasAnyCredential = store.users.some((candidate) => candidate.credentials.length > 0);
+    if (!hasAnyCredential) throw new Error("No registered Security Key found. Register first.");
+    const options = await generateAuthenticationOptions({
+      rpID: getRpID(request),
+      userVerification: "preferred"
+    });
+    await updateStore((draft) => {
+      draft.challenges = draft.challenges.filter((challenge) => challenge.key !== discoverableLoginChallengeKey);
+      draft.challenges.push({
+        key: discoverableLoginChallengeKey,
+        value: options.challenge,
+        purpose,
+        createdAt: new Date().toISOString()
+      });
+    });
+    return { options, user: null };
+  }
+
   if (!user || user.credentials.length === 0) {
     throw new Error("No registered Security Key found for that goose handle.");
   }
@@ -127,21 +156,24 @@ export async function authenticationOptions(request: Request, handle: string, pu
 
 export async function verifyAuthentication(
   request: Request,
-  handle: string,
+  handle: string | undefined,
   response: AuthenticationResponseJSON,
   purpose: "login" | "admin" | "player2" = "login"
 ) {
   const store = await readStore();
-  const normalized = formatGooseHandle(handle);
-  const legacy = handle.trim().toLowerCase();
-  const user = store.users.find((candidate) => {
+  const discovered = purpose === "login" && !handle ? findCredentialOwner(store, response.id) : null;
+  const normalized = handle ? formatGooseHandle(handle) : "";
+  const legacy = handle?.trim().toLowerCase() ?? "";
+  const user = discovered?.user ?? store.users.find((candidate) => {
     const stored = candidate.handle.toLowerCase();
     return stored === normalized.toLowerCase() || stored === legacy;
   });
-  if (!user) throw new Error("No registered goose found for this handle.");
-  const credential = user.credentials.find((candidate) => candidate.id === response.id);
+  if (!user) throw new Error(handle ? "No registered goose found for this handle." : "This Security Key is not registered for any goose.");
+  const credential = discovered?.credential ?? user.credentials.find((candidate) => candidate.id === response.id);
   if (!credential) throw new Error("This Security Key is not registered for that goose.");
-  const challenge = store.challenges.find((candidate) => candidate.key === `${purpose}:${user.id}`);
+  const challenge = store.challenges.find((candidate) => {
+    return candidate.key === `${purpose}:${user.id}` || (purpose === "login" && !handle && candidate.key === discoverableLoginChallengeKey);
+  });
   if (!challenge) throw new Error("Security Key challenge expired. Start again.");
   const verification = await verifyAuthenticationResponse({
     response,
@@ -160,7 +192,7 @@ export async function verifyAuthentication(
     const target = draft.users.find((candidate) => candidate.id === user.id);
     const targetCredential = target?.credentials.find((candidate) => candidate.id === credential.id);
     if (targetCredential) targetCredential.counter = verification.authenticationInfo.newCounter;
-    draft.challenges = draft.challenges.filter((candidate) => candidate.key !== `${purpose}:${user.id}`);
+    draft.challenges = draft.challenges.filter((candidate) => candidate.key !== `${purpose}:${user.id}` && candidate.key !== discoverableLoginChallengeKey);
   });
   return user;
 }

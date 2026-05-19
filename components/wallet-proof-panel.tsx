@@ -3,17 +3,8 @@
 import { useState } from "react";
 import { WalletCards } from "lucide-react";
 import { StatusBadge } from "@/components/arcade-primitives";
+import { getPreferredBrowserWallet } from "@/lib/browser-wallet";
 import type { LinkedWallet } from "@/lib/auth/store";
-
-type EthereumProvider = {
-  request<T = unknown>(args: { method: string; params?: unknown[] }): Promise<T>;
-};
-
-declare global {
-  interface Window {
-    ethereum?: EthereumProvider;
-  }
-}
 
 function formatAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -29,15 +20,16 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
     setError(null);
     setStatus(null);
 
-    if (!window.ethereum) {
-      setError("No browser wallet was detected. Security Key sign-in still works; add a wallet extension only when you want optional Wallet Proof.");
+    const wallet = await getPreferredBrowserWallet();
+    if (!wallet) {
+      setError("No browser wallet was detected. Security Key sign-in still works; for Ledger wallet proof, connect a Ledger account through a browser wallet such as MetaMask.");
       return;
     }
 
     setIsLinking(true);
     try {
-      setStatus("Requesting wallet account...");
-      const accounts = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
+      setStatus(`Requesting wallet account from ${wallet.name}...`);
+      const accounts = await wallet.provider.request<string[]>({ method: "eth_requestAccounts" });
       const address = accounts[0];
       if (!address) throw new Error("No wallet account was selected.");
 
@@ -46,8 +38,8 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
       const challenge = await challengeResponse.json();
       if (!challengeResponse.ok) throw new Error(challenge.error ?? "Could not create Wallet Proof challenge.");
 
-      setStatus("Review and sign the Wallet Proof message in your wallet...");
-      const signature = await window.ethereum.request<string>({
+      setStatus(`Review and sign the Wallet Proof message in ${wallet.name}. Use the Ledger-backed account if prompted.`);
+      const signature = await wallet.provider.request<string>({
         method: "personal_sign",
         params: [challenge.message, address]
       });
@@ -99,7 +91,7 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
 
       <p className="wallet-proof-copy">
         Wallet Proof adds a signed ownership badge to this profile. It does not replace Security Key sign-in, approve a transaction,
-        or make a wallet required for play.
+        or make a wallet required for play. The current demo uses MetaMask or another browser wallet as the transport; for the Ledger path, select a Ledger-backed account inside that wallet before signing.
       </p>
 
       <button className="wallet-proof-button" type="button" onClick={linkWallet} disabled={isLinking}>
