@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { WalletCards } from "lucide-react";
 import { StatusBadge } from "@/components/arcade-primitives";
+import { useCelebrationBurst } from "@/components/celebration-burst";
 import { getPreferredBrowserWallet } from "@/lib/browser-wallet";
+import { describeWalletProofError } from "@/lib/wallet-proof-errors";
 import type { LinkedWallet } from "@/lib/auth/store";
 
 function formatAddress(address: string) {
@@ -15,6 +17,7 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLinking, setIsLinking] = useState(false);
+  const { celebrate, celebration } = useCelebrationBurst();
 
   async function linkWallet() {
     setError(null);
@@ -27,23 +30,28 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
     }
 
     setIsLinking(true);
+    let step = "connecting to the browser wallet";
     try {
       setStatus(`Requesting wallet account from ${wallet.name}...`);
       const accounts = await wallet.provider.request<string[]>({ method: "eth_requestAccounts" });
       const address = accounts[0];
       if (!address) throw new Error("No wallet account was selected.");
 
+      step = "creating the server challenge";
       setStatus("Preparing Wallet Proof challenge...");
       const challengeResponse = await fetch("/api/wallet-proof/challenge", { method: "POST" });
       const challenge = await challengeResponse.json();
       if (!challengeResponse.ok) throw new Error(challenge.error ?? "Could not create Wallet Proof challenge.");
 
+      step = `signing the proof message in ${wallet.name}`;
       setStatus(`Review and sign the Wallet Proof message in ${wallet.name}. Use the Ledger-backed account if prompted.`);
       const signature = await wallet.provider.request<string>({
         method: "personal_sign",
         params: [challenge.message, address]
       });
+      if (!signature) throw new Error(`${wallet.name} did not return a signature.`);
 
+      step = "verifying the signed proof";
       setStatus("Verifying Wallet Proof...");
       const verifyResponse = await fetch("/api/wallet-proof/verify", {
         method: "POST",
@@ -59,9 +67,11 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
       if (!verifyResponse.ok) throw new Error(verified.error ?? "Wallet Proof verification failed.");
 
       setLinkedWallet(verified.wallet);
+      celebrate("Wallet Proof");
       setStatus("Wallet Proof linked. Security Key remains your primary identity.");
     } catch (linkError) {
-      setError(linkError instanceof Error ? linkError.message : "Wallet Proof was canceled or failed.");
+      console.error("Wallet Proof link failed", linkError);
+      setError(describeWalletProofError(linkError, step));
       setStatus(null);
     } finally {
       setIsLinking(false);
@@ -91,7 +101,7 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
 
       <p className="wallet-proof-copy">
         Wallet Proof adds a signed ownership badge to this profile. It does not replace Security Key sign-in, approve a transaction,
-        or make a wallet required for play. The current demo uses MetaMask or another browser wallet as the transport; for the Ledger path, select a Ledger-backed account inside that wallet before signing.
+        or make a wallet required for play. The current demo uses MetaMask or another browser wallet as the transport; for the Ledger path, select a Ledger-backed account inside that wallet before signing. Refreshing with a different account replaces the active wallet proof.
       </p>
 
       <button className="wallet-proof-button" type="button" onClick={linkWallet} disabled={isLinking}>
@@ -101,6 +111,7 @@ export function WalletProofPanel({ wallet }: { wallet: LinkedWallet | null }) {
 
       {status ? <p className="wallet-proof-message">{status}</p> : null}
       {error ? <p className="wallet-proof-error">{error}</p> : null}
+      {celebration}
     </div>
   );
 }

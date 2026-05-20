@@ -13,8 +13,6 @@ type AuthButtonProps = {
   redirectTo?: string;
 };
 
-const rememberedHandleKey = "silly-goose:last-claimed-handle";
-
 function normalizeHandle(value: string) {
   return formatGooseHandle(value);
 }
@@ -44,8 +42,6 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
 
   useEffect(() => {
     setReadiness(getLedgerReadiness());
-    const rememberedHandle = window.localStorage.getItem(rememberedHandleKey);
-    if (rememberedHandle) setHandle(rememberedHandle);
   }, []);
 
   async function prepareLedger() {
@@ -71,15 +67,12 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
         setStatus("Insert or unlock your Ledger Security Key, then approve the browser prompt.");
         const response = await startRegistration({ optionsJSON: options });
         const result = await postJson("/api/webauthn/register/verify", { handle: claimedHandle, response });
-        window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
         window.alert(`Security Key registered and signed in as @${result.user?.handle ?? claimedHandle}.`);
       } else {
-        const rememberedHandle = window.localStorage.getItem(rememberedHandleKey);
-        const options = await postJson("/api/webauthn/login/options", rememberedHandle ? { handle: rememberedHandle } : {});
+        const options = await postJson("/api/webauthn/login/options", {});
         setStatus("Approve the browser WebAuthn prompt with your Security Key.");
         const response = await startAuthentication({ optionsJSON: options });
-        const result = await postJson("/api/webauthn/login/verify", rememberedHandle ? { handle: rememberedHandle, response } : { response });
-        window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
+        const result = await postJson("/api/webauthn/login/verify", { response });
         window.alert(`Security Key sign-in remembered for @${result.user?.handle ?? "your goose"}.`);
       }
       setStatus("Verified. Opening the requested goose room...");
@@ -94,7 +87,7 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
   return (
     <div className="space-y-2">
       <label className="block text-xs font-black uppercase text-ink/70" htmlFor="goose-handle">
-        Goose handle for registration
+        Goose handle, registration only
       </label>
       <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
         <input

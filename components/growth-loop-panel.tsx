@@ -3,14 +3,22 @@
 import { useState } from "react";
 import { Coins, MailPlus, Swords, Trophy } from "lucide-react";
 import { StatusBadge } from "@/components/arcade-primitives";
+import { useCelebrationBurst } from "@/components/celebration-burst";
 import { getPreferredBrowserWallet } from "@/lib/browser-wallet";
 import type { GrowthLoopSnapshot } from "@/lib/growth-loop";
+
+const celebrationLabels = {
+  rivalry: "Signed Rivalry",
+  bread: "$Bread Reward",
+  ping: "Game Invite"
+} as const;
 
 export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLoopSnapshot }) {
   const [snapshot, setSnapshot] = useState(initialSnapshot);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const { celebrate, celebration } = useCelebrationBurst();
 
   async function runAction(action: "rivalry" | "bread" | "ping") {
     setError(null);
@@ -20,6 +28,8 @@ export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLo
       if (action === "rivalry") await createRivalry();
       if (action === "bread") await postBread();
       if (action === "ping") await sendPing();
+      celebrate(celebrationLabels[action]);
+      await new Promise((resolve) => window.setTimeout(resolve, 950));
       location.reload();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "Growth-loop action failed.");
@@ -125,6 +135,7 @@ export function GrowthLoopPanel({ initialSnapshot }: { initialSnapshot: GrowthLo
 
       {message ? <p className="growth-loop-message">{message}</p> : null}
       {error ? <p className="growth-loop-error">{error}</p> : null}
+      {celebration}
     </div>
   );
 }

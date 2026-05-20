@@ -96,6 +96,11 @@ export async function verifyWalletProof(params: {
     wallet.status = "linked";
 
     if (!existing) store.linkedWallets.push(wallet);
+    for (const candidate of store.linkedWallets) {
+      if (candidate.userId === params.userId && candidate.id !== wallet.id && candidate.status === "linked") {
+        candidate.status = "revoked";
+      }
+    }
     store.challenges = store.challenges.filter((candidate) => candidate.key !== params.challengeId);
     return wallet;
   });

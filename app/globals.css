@@ -871,6 +871,64 @@ button, input {
   color: #fecaca;
 }
 
+.celebration-burst {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow: hidden;
+}
+
+.celebration-honk {
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  display: grid;
+  min-width: min(82vw, 380px);
+  justify-items: center;
+  gap: .22rem;
+  border: 4px solid #070707;
+  border-radius: 5px;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 223, .98), rgba(244, 165, 28, .94));
+  box-shadow: 7px 8px 0 rgba(0, 0, 0, .3), inset 0 0 0 2px rgba(255, 255, 255, .4);
+  color: #100f0d;
+  font-family: var(--font-display), Impact, sans-serif;
+  padding: .72rem .9rem .62rem;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  animation: celebration-honk-pop 1.05s ease both;
+}
+
+.celebration-honk span {
+  font-size: clamp(2rem, 8vw, 4.8rem);
+  line-height: .9;
+  text-shadow: 3px 3px 0 rgba(255, 255, 255, .45);
+}
+
+.celebration-honk strong {
+  max-width: 100%;
+  color: #7f1d1d;
+  font-size: clamp(.72rem, 2.3vw, 1rem);
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.celebration-confetti span {
+  position: absolute;
+  left: var(--confetti-left);
+  top: -18px;
+  display: block;
+  width: 11px;
+  height: 19px;
+  border: 2px solid rgba(7, 7, 7, .48);
+  border-radius: 2px;
+  background: var(--confetti-color);
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, .22);
+  animation: celebration-confetti-fall 1.25s cubic-bezier(.12, .72, .38, 1) var(--confetti-delay) both;
+}
+
 .dogfood-feedback-panel {
   display: grid;
   gap: .65rem;
@@ -2322,6 +2380,44 @@ button.hero-proof-button:hover {
   100% {
     opacity: 0;
     transform: translateX(calc(100vw + 190px)) translateY(-14px) rotate(7deg);
+  }
+}
+
+@keyframes celebration-honk-pop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px) scale(.78) rotate(-2deg);
+  }
+
+  14% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1.06) rotate(1deg);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1) rotate(-1deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-16px) scale(.94) rotate(1deg);
+  }
+}
+
+@keyframes celebration-confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0) rotate(0deg);
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--confetti-drift), calc(100vh + 44px), 0) rotate(580deg);
   }
 }
 
