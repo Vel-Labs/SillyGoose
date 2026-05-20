@@ -1,4 +1,4 @@
-import { newId, updateStore, type GameOutcome, type GameRoom } from "@/lib/auth/store";
+import { derivePlayerStats, newId, updateStore, type GameOutcome, type GameRoom } from "@/lib/auth/store";
 import { gooseRoster } from "@/lib/goose-roster";
 
 const TIC_TAC_TOE_KEY = "tictac";
@@ -39,7 +39,7 @@ function createGameRoomId(existingIds: Set<string>) {
   return id;
 }
 
-function recordOutcomeIfComplete(store: { outcomes: GameOutcome[] }, room: GameRoom) {
+function recordOutcomeIfComplete(store: { outcomes: GameOutcome[]; playerStats: ReturnType<typeof derivePlayerStats> }, room: GameRoom) {
   if (!room.winner || room.completedOutcomeId) return;
   const outcome = {
     id: newId("outcome"),
@@ -57,6 +57,7 @@ function recordOutcomeIfComplete(store: { outcomes: GameOutcome[] }, room: GameR
   };
   room.completedOutcomeId = outcome.id;
   store.outcomes.unshift(outcome);
+  store.playerStats = derivePlayerStats(store.outcomes);
 }
 
 function makeAiOpeningMove(room: GameRoom) {

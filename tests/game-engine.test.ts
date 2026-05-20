@@ -44,6 +44,10 @@ describe("game engine persistence", () => {
       aiMode: false
     });
     expect(store.outcomes[0].moves.map((move) => move.index)).toEqual([0, 3, 1, 4, 2]);
+    expect(store.playerStats).toEqual(expect.arrayContaining([
+      expect.objectContaining({ userId: "player-one", gamesPlayed: 1, wins: 1, losses: 0, draws: 0, winRate: 100 }),
+      expect.objectContaining({ userId: "player-two", gamesPlayed: 1, wins: 0, losses: 1, draws: 0, winRate: 0 })
+    ]));
   });
 
   it("can open a human room with Player Two going first", async () => {

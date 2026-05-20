@@ -2080,6 +2080,103 @@ button.hero-proof-button:hover {
   padding: .8rem;
 }
 
+.game-actions-popover {
+  width: min(390px, 82vw);
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .55rem;
+  min-height: 38px;
+  border: 2px solid rgba(7, 7, 7, .82);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, .52);
+  padding: .45rem .55rem;
+  color: #241912;
+  text-transform: uppercase;
+}
+
+.leaderboard-row span,
+.leaderboard-row strong,
+.leaderboard-row em {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.leaderboard-row span,
+.leaderboard-row em {
+  color: rgba(36, 25, 18, .72);
+}
+
+.leaderboard-row-empty {
+  display: block;
+}
+
+.leaderboard-page-row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) repeat(3, minmax(70px, auto));
+  align-items: center;
+  gap: .7rem;
+  min-height: 64px;
+  border: 3px solid #070707;
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(244, 165, 28, .18), rgba(42, 127, 214, .16)),
+    rgba(0, 0, 0, .42);
+  box-shadow: inset 0 0 0 2px rgba(255, 247, 223, .08);
+  color: var(--sg-parchment);
+  padding: .65rem;
+  text-transform: uppercase;
+}
+
+.leaderboard-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .25rem;
+  min-height: 38px;
+  border: 2px solid #070707;
+  border-radius: 3px;
+  background: var(--sg-signal);
+  color: #100f0d;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.leaderboard-page-row strong,
+.leaderboard-page-row span {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.leaderboard-page-row strong {
+  font-size: 14px;
+}
+
+.leaderboard-page-row span {
+  margin-top: .2rem;
+  color: rgba(255, 247, 223, .62);
+  font-size: 10px;
+}
+
+.leaderboard-metric {
+  min-width: 66px;
+  text-align: center;
+}
+
 .turn-side-callout {
   position: absolute;
   top: 36%;

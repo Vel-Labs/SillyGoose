@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   try {
     const { handle, response } = await request.json();
     const user = await verifyAuthentication(request, handle ? String(handle) : undefined, response, "login");
-    await createSession(user.id);
+    await createSession(user.id, request);
     await addAudit(`${user.name} signed in with a fresh WebAuthn assertion.`, "auth");
     return NextResponse.json({ ok: true, user });
   } catch (error) {

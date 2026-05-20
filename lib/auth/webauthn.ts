@@ -122,7 +122,7 @@ export async function authenticationOptions(request: Request, handle?: string, p
       userVerification: "preferred"
     });
     await updateStore((draft) => {
-      draft.challenges = draft.challenges.filter((challenge) => challenge.key !== discoverableLoginChallengeKey);
+      draft.challenges = draft.challenges.filter((challenge) => challenge.purpose !== "login");
       draft.challenges.push({
         key: discoverableLoginChallengeKey,
         value: options.challenge,
@@ -172,7 +172,8 @@ export async function verifyAuthentication(
   const credential = discovered?.credential ?? user.credentials.find((candidate) => candidate.id === response.id);
   if (!credential) throw new Error("This Security Key is not registered for that goose.");
   const challenge = store.challenges.find((candidate) => {
-    return candidate.key === `${purpose}:${user.id}` || (purpose === "login" && !handle && candidate.key === discoverableLoginChallengeKey);
+    if (purpose === "login" && !handle) return candidate.key === discoverableLoginChallengeKey;
+    return candidate.key === `${purpose}:${user.id}`;
   });
   if (!challenge) throw new Error("Security Key challenge expired. Start again.");
   const verification = await verifyAuthenticationResponse({

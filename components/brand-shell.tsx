@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { Feather, ShieldCheck } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth/session";
 import { Attribution, StarRepoButton } from "./attribution";
 import { GoosePortrait } from "./goose-portrait";
 
-export function BrandHeader() {
+export async function BrandHeader() {
+  const user = await getCurrentUser();
+
   return (
     <header className="app-width mx-auto flex w-full shrink-0 flex-wrap items-center justify-between gap-4 px-4 py-3 sm:min-h-[92px] sm:px-6">
       <Link href="/" className="flex items-center gap-3">
@@ -15,8 +18,13 @@ export function BrandHeader() {
       </Link>
       <nav className="flex flex-wrap items-center gap-2 text-xs font-black uppercase">
         <Link className="wood-sign nav-wood-sign px-3 py-2" href="/dashboard">Arcade</Link>
+        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/leaderboard">Leaderboard</Link>
         <Link className="wood-sign nav-wood-sign px-3 py-2" href="/profile">Profile</Link>
-        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/login">Sign in</Link>
+        {user ? (
+          <Link className="wood-sign nav-wood-sign px-3 py-2" href="/api/auth/sign-out">Sign out</Link>
+        ) : (
+          <Link className="wood-sign nav-wood-sign px-3 py-2" href="/login">Sign in</Link>
+        )}
       </nav>
     </header>
   );

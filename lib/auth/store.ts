@@ -130,6 +130,17 @@ export type GameOutcome = {
   completedAt: string;
 };
 
+export type PlayerStats = {
+  userId: string;
+  gamesPlayed: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  winRate: number;
+  currentStreak: number;
+  updatedAt: string;
+};
+
 type DemoStore = {
   users: DemoUser[];
   sessions: Session[];
@@ -137,6 +148,7 @@ type DemoStore = {
   audits: AuditEntry[];
   rooms: GameRoom[];
   outcomes: GameOutcome[];
+  playerStats: PlayerStats[];
   linkedWallets: LinkedWallet[];
   rivalryChallenges: SignedRivalryChallenge[];
   breadTransactions: BreadTransaction[];
@@ -177,6 +189,7 @@ const emptyStore = (): DemoStore => ({
   audits: [],
   rooms: [],
   outcomes: [],
+  playerStats: [],
   linkedWallets: [],
   rivalryChallenges: [],
   breadTransactions: [],
@@ -190,6 +203,7 @@ async function loadStore(): Promise<DemoStore> {
   try {
     const store = JSON.parse(await readFile(storePath, "utf8")) as DemoStore;
     store.outcomes ??= [];
+    store.playerStats ??= derivePlayerStats(store.outcomes);
     store.linkedWallets ??= [];
     store.rivalryChallenges ??= [];
     store.breadTransactions ??= [];
@@ -218,7 +232,7 @@ class SupabaseStoreClient {
   constructor(private readonly config: SupabaseConfig) {}
 
   async loadStore(): Promise<DemoStore> {
-    const [users, credentials, sessions, challenges, audits, rooms, players, moves, outcomes, linkedWallets, rivalryChallenges, breadTransactions, verifiedPings, dogfoodFeedback] = await Promise.all([
+    const [users, credentials, sessions, challenges, audits, rooms, players, moves, outcomes, playerStats, linkedWallets, rivalryChallenges, breadTransactions, verifiedPings, dogfoodFeedback] = await Promise.all([
       this.select<any>("demo_users", "select=id,handle,name,created_at&order=created_at.asc"),
       this.select<any>("passkey_credentials", "select=id,user_id,public_key,counter,transports,device_type,backed_up"),
       this.select<any>("sessions", "select=id,user_id,created_at&order=created_at.asc"),
@@ -228,6 +242,7 @@ class SupabaseStoreClient {
       this.select<any>("room_players", "select=room_id,mark,user_id,goose,verified_at"),
       this.select<any>("room_moves", "select=room_id,mark,square_index,created_at&order=created_at.asc"),
       this.select<any>("game_outcomes", "select=id,room_id,game_key,winner,board,moves,players,ai_mode,completed_at&order=completed_at.desc"),
+      this.select<any>("player_stats", "select=user_id,games_played,wins,losses,draws,win_rate,current_streak,updated_at&order=wins.desc,games_played.desc,updated_at.desc"),
       this.select<any>("linked_wallets", "select=id,user_id,chain,address,verified_at,last_signature_challenge,status,created_at&order=verified_at.desc"),
       this.select<any>("signed_rivalry_challenges", "select=id,nonce,challenger_user_id,rival_user_id,room_id,game_key,linked_wallet_id,wallet_address,signature,typed_data,status,expires_at,created_at&order=created_at.desc"),
       this.select<any>("bread_transactions", "select=id,user_id,counterparty_user_id,amount,kind,status,memo,challenge_id,created_at&order=created_at.desc"),
@@ -263,6 +278,18 @@ class SupabaseStoreClient {
       movesByRoom.set(row.room_id, bucket);
     }
 
+    const mappedOutcomes = outcomes.map((row) => ({
+      id: row.id,
+      roomId: row.room_id,
+      gameKey: row.game_key ?? "tictac",
+      winner: row.winner,
+      board: row.board,
+      moves: row.moves ?? [],
+      players: row.players ?? {},
+      aiMode: row.ai_mode,
+      completedAt: row.completed_at
+    }));
+
     return {
       users: users.map((row) => ({
         id: row.id,
@@ -292,17 +319,17 @@ class SupabaseStoreClient {
         rematchVotes: row.rematch_votes ?? [],
         completedOutcomeId: row.completed_outcome_id ?? undefined
       })),
-      outcomes: outcomes.map((row) => ({
-        id: row.id,
-        roomId: row.room_id,
-        gameKey: row.game_key ?? "tictac",
-        winner: row.winner,
-        board: row.board,
-        moves: row.moves ?? [],
-        players: row.players ?? {},
-        aiMode: row.ai_mode,
-        completedAt: row.completed_at
-      })),
+      outcomes: mappedOutcomes,
+      playerStats: playerStats.length ? playerStats.map((row) => ({
+        userId: row.user_id,
+        gamesPlayed: Number(row.games_played ?? 0),
+        wins: Number(row.wins ?? 0),
+        losses: Number(row.losses ?? 0),
+        draws: Number(row.draws ?? 0),
+        winRate: Number(row.win_rate ?? 0),
+        currentStreak: Number(row.current_streak ?? 0),
+        updatedAt: row.updated_at
+      })) : derivePlayerStats(mappedOutcomes),
       linkedWallets: linkedWallets.map((row) => ({
         id: row.id,
         userId: row.user_id,
@@ -508,6 +535,18 @@ class SupabaseStoreClient {
       completed_at: outcome.completedAt
     })));
 
+    const playerStats = store.playerStats?.length ? store.playerStats : derivePlayerStats(store.outcomes);
+    await this.replaceRows("player_stats", "user_id", playerStats.map((stats) => ({
+      user_id: stats.userId,
+      games_played: stats.gamesPlayed,
+      wins: stats.wins,
+      losses: stats.losses,
+      draws: stats.draws,
+      win_rate: stats.winRate,
+      current_streak: stats.currentStreak,
+      updated_at: stats.updatedAt
+    })));
+
     for (const room of store.rooms.filter((candidate) => candidate.completedOutcomeId)) {
       await this.request("game_rooms", {
         method: "PATCH",
@@ -529,7 +568,7 @@ class SupabaseStoreClient {
         return player ? [{ room_id: room.id, mark, user_id: player.userId, goose: player.goose, verified_at: player.verifiedAt }] : [];
       })
     );
-    if (playerRows.length) await this.request("room_players", { method: "POST", body: playerRows, prefer: "return=minimal" });
+    if (playerRows.length) await this.upsert("room_players", playerRows, "room_id,mark");
 
     const moveRows = store.rooms.flatMap((room) =>
       room.moves.map((move) => ({
@@ -616,6 +655,46 @@ export async function readStore() {
 
 export function newId(prefix: string) {
   return `${prefix}_${crypto.randomUUID().replaceAll("-", "").slice(0, 14)}`;
+}
+
+export function derivePlayerStats(outcomes: GameOutcome[]): PlayerStats[] {
+  const statsByUser = new Map<string, PlayerStats>();
+  const sorted = [...outcomes].sort((a, b) => a.completedAt.localeCompare(b.completedAt));
+
+  for (const outcome of sorted) {
+    for (const mark of ["X", "O"] as const) {
+      const player = outcome.players[mark];
+      if (!player || player.userId === "offline-minimax-demo") continue;
+      const stats = statsByUser.get(player.userId) ?? {
+        userId: player.userId,
+        gamesPlayed: 0,
+        wins: 0,
+        losses: 0,
+        draws: 0,
+        winRate: 0,
+        currentStreak: 0,
+        updatedAt: outcome.completedAt
+      };
+      stats.gamesPlayed += 1;
+      if (outcome.winner === "draw") {
+        stats.draws += 1;
+        stats.currentStreak = 0;
+      } else if (outcome.winner === mark) {
+        stats.wins += 1;
+        stats.currentStreak = Math.max(0, stats.currentStreak) + 1;
+      } else {
+        stats.losses += 1;
+        stats.currentStreak = Math.min(0, stats.currentStreak) - 1;
+      }
+      stats.winRate = Number(((stats.wins / stats.gamesPlayed) * 100).toFixed(2));
+      stats.updatedAt = outcome.completedAt;
+      statsByUser.set(player.userId, stats);
+    }
+  }
+
+  return Array.from(statsByUser.values()).sort((a, b) => {
+    return b.wins - a.wins || b.gamesPlayed - a.gamesPlayed || b.winRate - a.winRate || b.updatedAt.localeCompare(a.updatedAt);
+  });
 }
 
 export async function getOrCreateUser(handle: string) {

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const { handle, response } = await request.json();
     const user = await verifyRegistration(request, String(handle || defaultGooseHandle), response);
-    await createSession(user.id);
+    await createSession(user.id, request);
     await addAudit(`${user.name} registered a Ledger Security Key-compatible WebAuthn credential.`, "auth");
     return NextResponse.json({ ok: true, user });
   } catch (error) {

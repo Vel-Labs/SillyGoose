@@ -51,4 +51,41 @@ describe("Security Key login options", () => {
       purpose: "login"
     }));
   });
+
+  it("clears stale per-user login challenges before starting discoverable login", async () => {
+    const { updateStore, readStore } = await import("@/lib/auth/store");
+    const { authenticationOptions } = await import("@/lib/auth/webauthn");
+
+    await updateStore((store) => {
+      store.users.push({
+        id: "goose-user-1",
+        name: "0xStinky-Goose",
+        handle: "0xStinky-Goose",
+        createdAt: new Date().toISOString(),
+        credentials: [{
+          id: "test-credential-id",
+          publicKey: [1, 2, 3],
+          counter: 0,
+          transports: ["usb"]
+        }]
+      });
+      store.challenges.push({
+        key: "login:goose-user-1",
+        value: "stale-challenge",
+        userId: "goose-user-1",
+        purpose: "login",
+        createdAt: new Date(Date.now() - 60_000).toISOString()
+      });
+    });
+
+    const request = new Request("http://localhost:3000/api/webauthn/login/options", {
+      headers: { origin: "http://localhost:3000" }
+    });
+    await authenticationOptions(request, undefined, "login");
+    const store = await readStore();
+
+    expect(store.challenges).not.toContainEqual(expect.objectContaining({ key: "login:goose-user-1" }));
+    expect(store.challenges).toHaveLength(1);
+    expect(store.challenges[0]).toMatchObject({ key: "login:discoverable", purpose: "login" });
+  });
 });
