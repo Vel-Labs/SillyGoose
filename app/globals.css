@@ -1488,6 +1488,11 @@ button.hero-proof-button:hover {
   filter: brightness(1.12);
 }
 
+a.hero-proof-button:hover {
+  color: #f4a51c;
+  filter: brightness(1.12);
+}
+
 .hero-proof-detail {
   position: absolute;
   top: calc(100% + 12px);

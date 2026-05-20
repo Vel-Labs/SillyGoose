@@ -1,10 +1,15 @@
+import Link from "next/link";
+import { Gamepad2, LogOut, ShieldCheck } from "lucide-react";
 import { PageShell } from "@/components/brand-shell";
 import { GooseLoginPanel } from "@/components/goose-login-panel";
 import { GoosePortrait } from "@/components/goose-portrait";
 import { HeroProofButtons } from "@/components/hero-proof-buttons";
 import { HonkApprovedButton } from "@/components/honk-approved-button";
+import { getCurrentUser } from "@/lib/auth/session";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getCurrentUser();
+
   return (
     <PageShell>
       <section className="app-width mx-auto grid min-h-[calc(100dvh-150px)] w-full items-center gap-4 px-4 pb-4 pt-1 sm:px-6 lg:h-full lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(380px,26vw)]">
@@ -32,9 +37,33 @@ export default function HomePage() {
           </div>
         </div>
         <div className="flex min-h-[500px] flex-col justify-center gap-4">
-          <GooseLoginPanel />
+          {user ? <SignedInHomePanel handle={user.handle} /> : <GooseLoginPanel />}
         </div>
       </section>
     </PageShell>
+  );
+}
+
+function SignedInHomePanel({ handle }: { handle: string }) {
+  return (
+    <section className="login-terminal parchment poster-border w-full max-w-md p-5">
+      <div className="mb-4 text-center">
+        <div className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-sm border-4 border-black bg-signal text-ink">
+          <ShieldCheck className="h-6 w-6" />
+        </div>
+        <h2 className="text-[1.65rem] font-black uppercase leading-[1.02] text-ink">Signed in as @{handle}</h2>
+        <p className="mt-2 text-xs font-black uppercase leading-snug text-ink/75">
+          Your Security Key session is still active.
+        </p>
+      </div>
+      <div className="grid gap-2">
+        <Link className="inline-flex min-h-11 flex-wrap items-center justify-center gap-2 rounded-sm border-2 border-black bg-signal px-4 py-2 text-center text-sm font-black uppercase text-ink transition hover:bg-[#ffc247]" href="/dashboard">
+          <Gamepad2 className="h-4 w-4" /> Continue to arcade
+        </Link>
+        <Link className="inline-flex min-h-11 flex-wrap items-center justify-center gap-2 rounded-sm border-2 border-black bg-ember px-4 py-2 text-center text-sm font-black uppercase text-white transition hover:bg-[#e94430]" href="/api/auth/sign-out">
+          <LogOut className="h-4 w-4" /> Sign out
+        </Link>
+      </div>
+    </section>
   );
 }

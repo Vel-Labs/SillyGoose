@@ -13,13 +13,6 @@ type AuthButtonProps = {
   redirectTo?: string;
 };
 
-type RegisteredAccount = {
-  id: string;
-  name: string;
-  handle: string;
-  credentialCount: number;
-};
-
 const rememberedHandleKey = "silly-goose.remembered-handle";
 
 function normalizeHandle(value: string) {
@@ -43,7 +36,7 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [prepared, setPrepared] = useState(false);
-  const [accounts, setAccounts] = useState<RegisteredAccount[]>([]);
+  const [rememberedHandle, setRememberedHandle] = useState<string | null>(null);
   const [readiness, setReadiness] = useState<LedgerReadiness>({
     available: false,
     status: "deferred",
@@ -52,18 +45,12 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
 
   useEffect(() => {
     setReadiness(getLedgerReadiness());
-    const rememberedHandle = window.localStorage.getItem(rememberedHandleKey);
-    if (rememberedHandle) setHandle(normalizeHandle(rememberedHandle));
-    fetch("/api/webauthn/accounts", { cache: "no-store" })
-      .then((response) => response.ok ? response.json() : null)
-      .then((data) => {
-        const nextAccounts = Array.isArray(data?.accounts) ? data.accounts as RegisteredAccount[] : [];
-        setAccounts(nextAccounts);
-        if (!rememberedHandle && nextAccounts[0]?.handle) setHandle(normalizeHandle(nextAccounts[0].handle));
-      })
-      .catch(() => {
-        // The manual handle path still works if the account list cannot load.
-      });
+    const storedHandle = window.localStorage.getItem(rememberedHandleKey);
+    if (storedHandle) {
+      const normalized = normalizeHandle(storedHandle);
+      setRememberedHandle(normalized);
+      setHandle(normalized);
+    }
   }, []);
 
   async function prepareLedger() {
@@ -125,27 +112,11 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
           <Shuffle className="h-4 w-4" /> Random
         </Button>
       </div>
-      {accounts.length ? (
-        <div className="grid gap-1">
-          <p className="text-[10px] font-black uppercase text-ink/60">Stored Security Key accounts</p>
-          <div className="flex flex-wrap gap-1.5">
-            {accounts.slice(0, 5).map((account) => (
-              <button
-                key={account.id}
-                type="button"
-                onClick={() => setHandle(normalizeHandle(account.handle))}
-                className="rounded-sm border-2 border-black bg-white/70 px-2 py-1 text-[10px] font-black uppercase text-ink transition hover:bg-signal"
-              >
-                {account.handle}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : (
+      {rememberedHandle ? (
         <p className="rounded-sm border-2 border-black bg-white/70 px-2 py-1 text-[10px] font-black uppercase leading-snug text-ink/70">
-          No stored Security Key accounts found in the current store. Register once to attach this signer to your goose handle.
+          Remembered on this browser: {rememberedHandle}
         </p>
-      )}
+      ) : null}
       <Button onClick={prepareLedger} variant="secondary" className="w-full">
         <ShieldCheck className="h-4 w-4" /> Prepare Ledger Security Key app
       </Button>

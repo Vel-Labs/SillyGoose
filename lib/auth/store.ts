@@ -653,20 +653,6 @@ export async function readStore() {
   return loadStore();
 }
 
-export async function getRegisteredAccounts() {
-  const store = await loadStore();
-  return store.users
-    .filter((user) => user.credentials.length > 0)
-    .map((user) => ({
-      id: user.id,
-      name: user.name,
-      handle: user.handle,
-      credentialCount: user.credentials.length,
-      createdAt: user.createdAt
-    }))
-    .sort((a, b) => a.handle.localeCompare(b.handle));
-}
-
 export function newId(prefix: string) {
   return `${prefix}_${crypto.randomUUID().replaceAll("-", "").slice(0, 14)}`;
 }
