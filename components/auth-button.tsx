@@ -13,6 +13,15 @@ type AuthButtonProps = {
   redirectTo?: string;
 };
 
+type RegisteredAccount = {
+  id: string;
+  name: string;
+  handle: string;
+  credentialCount: number;
+};
+
+const rememberedHandleKey = "silly-goose.remembered-handle";
+
 function normalizeHandle(value: string) {
   return formatGooseHandle(value);
 }
@@ -34,6 +43,7 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [prepared, setPrepared] = useState(false);
+  const [accounts, setAccounts] = useState<RegisteredAccount[]>([]);
   const [readiness, setReadiness] = useState<LedgerReadiness>({
     available: false,
     status: "deferred",
@@ -42,6 +52,18 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
 
   useEffect(() => {
     setReadiness(getLedgerReadiness());
+    const rememberedHandle = window.localStorage.getItem(rememberedHandleKey);
+    if (rememberedHandle) setHandle(normalizeHandle(rememberedHandle));
+    fetch("/api/webauthn/accounts", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((data) => {
+        const nextAccounts = Array.isArray(data?.accounts) ? data.accounts as RegisteredAccount[] : [];
+        setAccounts(nextAccounts);
+        if (!rememberedHandle && nextAccounts[0]?.handle) setHandle(normalizeHandle(nextAccounts[0].handle));
+      })
+      .catch(() => {
+        // The manual handle path still works if the account list cannot load.
+      });
   }, []);
 
   async function prepareLedger() {
@@ -67,12 +89,14 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
         setStatus("Insert or unlock your Ledger Security Key, then approve the browser prompt.");
         const response = await startRegistration({ optionsJSON: options });
         const result = await postJson("/api/webauthn/register/verify", { handle: claimedHandle, response });
+        window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
         window.alert(`Security Key registered and signed in as @${result.user?.handle ?? claimedHandle}.`);
       } else {
-        const options = await postJson("/api/webauthn/login/options", {});
+        const options = await postJson("/api/webauthn/login/options", { handle: claimedHandle });
         setStatus("Approve the browser WebAuthn prompt with your Security Key.");
         const response = await startAuthentication({ optionsJSON: options });
-        const result = await postJson("/api/webauthn/login/verify", { response });
+        const result = await postJson("/api/webauthn/login/verify", { handle: claimedHandle, response });
+        window.localStorage.setItem(rememberedHandleKey, result.user?.handle ?? claimedHandle);
         window.alert(`Security Key sign-in remembered for @${result.user?.handle ?? "your goose"}.`);
       }
       setStatus("Verified. Opening the requested goose room...");
@@ -87,7 +111,7 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
   return (
     <div className="space-y-2">
       <label className="block text-xs font-black uppercase text-ink/70" htmlFor="goose-handle">
-        Goose handle, registration only
+        Goose handle for sign in / registration
       </label>
       <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
         <input
@@ -101,6 +125,27 @@ export function AuthButton({ mode = "login", redirectTo = "/dashboard" }: AuthBu
           <Shuffle className="h-4 w-4" /> Random
         </Button>
       </div>
+      {accounts.length ? (
+        <div className="grid gap-1">
+          <p className="text-[10px] font-black uppercase text-ink/60">Stored Security Key accounts</p>
+          <div className="flex flex-wrap gap-1.5">
+            {accounts.slice(0, 5).map((account) => (
+              <button
+                key={account.id}
+                type="button"
+                onClick={() => setHandle(normalizeHandle(account.handle))}
+                className="rounded-sm border-2 border-black bg-white/70 px-2 py-1 text-[10px] font-black uppercase text-ink transition hover:bg-signal"
+              >
+                {account.handle}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="rounded-sm border-2 border-black bg-white/70 px-2 py-1 text-[10px] font-black uppercase leading-snug text-ink/70">
+          No stored Security Key accounts found in the current store. Register once to attach this signer to your goose handle.
+        </p>
+      )}
       <Button onClick={prepareLedger} variant="secondary" className="w-full">
         <ShieldCheck className="h-4 w-4" /> Prepare Ledger Security Key app
       </Button>

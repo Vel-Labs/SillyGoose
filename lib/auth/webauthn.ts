@@ -133,8 +133,11 @@ export async function authenticationOptions(request: Request, handle?: string, p
     return { options, user: null };
   }
 
-  if (!user || user.credentials.length === 0) {
-    throw new Error("No registered Security Key found for that goose handle.");
+  if (!user) {
+    throw new Error("No goose account found for that handle. Register this Security Key first.");
+  }
+  if (user.credentials.length === 0) {
+    throw new Error("That goose handle exists, but no Security Key credential is stored for it. Register again with this handle to attach the signer.");
   }
   const options = await generateAuthenticationOptions({
     rpID: getRpID(request),
