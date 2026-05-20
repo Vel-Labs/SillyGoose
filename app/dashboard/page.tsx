@@ -7,7 +7,7 @@ import { readStore } from "@/lib/auth/store";
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab } = await searchParams;
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?next=/dashboard");
   const store = await readStore();
   const outcomes = store.outcomes.filter((outcome) => (
     outcome.players.X?.userId === user.id || outcome.players.O?.userId === user.id

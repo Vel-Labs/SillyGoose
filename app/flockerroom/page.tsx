@@ -9,7 +9,7 @@ const flockerroomEnabled = process.env.NEXT_PUBLIC_ENABLE_FLOCKERROOM !== "false
 
 export default async function FlockerroomPage() {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?next=/flockerroom");
 
   if (!flockerroomEnabled) {
     return (

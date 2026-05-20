@@ -17,9 +17,9 @@ export async function BrandHeader() {
         </div>
       </Link>
       <nav className="flex flex-wrap items-center gap-2 text-xs font-black uppercase">
-        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/dashboard">Arcade</Link>
+        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/dashboard" prefetch={false}>Arcade</Link>
         <Link className="wood-sign nav-wood-sign px-3 py-2" href="/leaderboard">Leaderboard</Link>
-        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/profile">Profile</Link>
+        <Link className="wood-sign nav-wood-sign px-3 py-2" href="/profile" prefetch={false}>Profile</Link>
         {user ? (
           <Link className="wood-sign nav-wood-sign px-3 py-2" href="/api/auth/sign-out">Sign out</Link>
         ) : (

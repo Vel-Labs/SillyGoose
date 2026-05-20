@@ -23,7 +23,7 @@ import { getPrimaryLinkedWallet } from "@/lib/wallet-proof";
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/login?next=/profile");
 
   const store = await readStore();
   const outcomes = store.outcomes.filter((outcome) => {
